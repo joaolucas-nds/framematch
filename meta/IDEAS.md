@@ -1,0 +1,62 @@
+# IDEAS.md — Brainstorm e Visão
+
+> **Segundo cérebro** do projeto. Captura TUDO que for mencionado, mesmo solto ou no meio de outro assunto.
+> Nunca perde: ideia implementada vai para «Concluídas»; ideia recusada vai para «Descartadas» com o motivo.
+> Separar por autor (você × assistente) ajuda a lembrar de onde veio cada coisa.
+
+---
+
+## 💡 Ideias Ativas — Usuário
+
+### 2026-05 — Ferramenta Python de compressão em lote
+Ferramenta separada (Python + Pillow) que:
+- Percorre uma pasta raiz e subpastas
+- Para cada imagem **acima de um limite configurável** (ex: 4 MB), cria uma cópia comprimida no mesmo local e move o original para uma subpasta `_originais/` (preservando o nome)
+- Imagens abaixo do limite não são tocadas (sem duplicatas desnecessárias)
+- Interface simples (CLI ou GUI básica) com o limite configurável
+- Nunca renomeia — diferencia original de comprimido apenas por pasta
+- **Saída sempre em PNG/JPG, NUNCA WebP** — o Figma rejeita WebP no `figma.createImage` (ver Descartadas). Para fotos sem transparência, JPG; para imagens com alpha, PNG otimizado (redução de paleta tipo *pngquant*) preserva a transparência e ainda encolhe bastante.
+
+### 2026-05 — Exportar mapeamento atual (JSON)
+Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de imagem, grade) como JSON para reutilizar em sessões futuras sem refazer do zero. Especialmente útil quando o mesmo template é usado repetidamente. (Complementa a persistência via `clientStorage`, abaixo — o JSON serve para portar entre máquinas/templates diferentes.)
+
+---
+
+## 🤖 Ideias Ativas — Assistente
+
+### 2026-06-15 — Persistência automática via `figma.clientStorage` (recomendada)
+Lembrar automaticamente o último mapeamento, a configuração de grade e os checkboxes entre sessões, sem o usuário precisar exportar/importar nada. É o padrão dos bons plugins de dados do Figma e ataca a dor real de refazer o Passo 3 a cada uso. Mais simples para o caso comum que o "exportar JSON" (que continua útil para portar entre máquinas). Bom momento para implementar agora que o `id` do plugin foi fixado (DEC-007). → ROADMAP F5.
+
+### 2026-05-30 — Offset X/Y configurável no Passo 5
+Atualmente os frames gerados aparecem sempre à direita do template (`ox = TPL.x + TPL.w + 60`). Expor `ox` e `oy` como campos editáveis no Passo 5 daria controle sobre onde o grid aparece no canvas — útil quando o template fica em um canto específico da página. Encaixa bem agora que o Passo 5 ganhou o componente de stepper (DEC-006).
+
+### 2026-05-30 — Detecção de re-geração (frames duplicados)
+Antes de gerar, verificar se já existem clones do template no canvas para evitar sobreposição acidental. Poderia ser um aviso com opção de prosseguir ou cancelar.
+
+### 2026-05-30 — Envio de imagens por lote (chunk)
+Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por vez ou em grupos pequenos e gerar cada frame à medida que chega. Isso removeria o limitador de 4 MB e permitiria catálogos com imagens grandes. Mudança de arquitetura significativa — avaliar quando o limite for um problema real. → ROADMAP F6.
+
+---
+
+## ✅ Concluídas
+
+- **`normForMatch` para matching robusto** — implementada em 0.2.0.
+- **Limitador de tamanho com chip laranja** — implementado em 0.2.0.
+- **Múltiplos slots de imagem** — implementado em 0.3.0 / ver DEC-005.
+- **Auto-mapeamento de imagens** — implementado em 0.3.0.
+- **Auto-detecção do frame template por nome** — implementado em 0.3.0.
+- **Pular Passo 4 quando sem imagens** — implementado em 0.3.0.
+- **Botões +/− para "Por linha"** — implementado em 0.3.0 (evoluído para stepper editável em 0.4.0).
+- **Excluir template após gerar** — implementado em 0.3.0.
+- **Padrões dos checkboxes configuráveis** — implementado em 0.3.0.
+- **Stepper editável (botões + caixa) nos 3 campos do Passo 5** — implementado em 0.4.0 / ver DEC-006.
+
+---
+
+## 🚫 Descartadas
+
+- **Compressão via canvas** — descartada porque `canvas.toBlob('image/jpeg')` destrói transparência de PNG. Ver FIX-002.
+- **Base64 para transferência de imagens** — descartada porque `code.js` não tem `atob` no sandbox do Figma. Ver FIX-003.
+- **Uma pasta por slot de imagem** — descartada em favor de uma pasta única (DEC-005): mais simples para o usuário, funciona bem porque arquivos de slots distintos têm nomes distintos.
+- **WebP para envio ao Figma** — descartada porque `figma.createImage` aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Os plugins que "importam WebP" convertem para PNG antes — o que cairia na corrupção de transparência do canvas (FIX-002) ou exigiria servidor externo. Para reduzir payload mantendo alpha, o caminho é PNG otimizado offline, não WebP. Ver CONTEXT armadilha #7 / HISTORICO §4.
+- **Matching por nome de frame (modo índice, estilo CSV Data Merge)** — descartada porque concorre com o paradigma central de "clonar template". O caso prático que parecia exigir isso (vários frames de imagem por produto, ex: `frame 1`…`frame 4`) já é resolvido por **múltiplos slots de imagem** (DEC-005). Reabrir só se surgir o fluxo "preencher frames já diagramados à mão, sem clonar template".

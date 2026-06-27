@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Inter, system-ui, sans-serif; background: #1e1e1e; color: #e0e0e0; font-size: 11px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+#stepbar { display: flex; align-items: center; padding: 10px 14px; background: #161616; border-bottom: 1px solid #333; gap: 4px; flex-shrink: 0; }
+.stp { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; background: #333; color: #555; flex-shrink: 0; }
+.stp.active { background: #18a0fb; color: #fff; }
+.stp.done   { background: #1bc47d; color: #fff; }
+.stp-line   { flex: 1; height: 2px; background: #333; }
+.stp-line.done { background: #1bc47d; }
+#step-title { font-size: 10px; color: #555; margin-left: 8px; flex-shrink: 0; }
+#content { flex: 1; overflow-y: auto; padding: 14px; }
+#content::-webkit-scrollbar { width: 4px; }
+#content::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 2px; }
+.panel { display: none; }
+.panel.active { display: block; }
+h2 { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.sub { color: #666; font-size: 11px; margin-bottom: 12px; line-height: 1.5; }
+.card { background: #252525; border: 1px solid #353535; border-radius: 7px; padding: 11px; margin-bottom: 10px; }
+.card-title { font-size: 9px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.btn { padding: 7px 14px; border-radius: 5px; border: none; cursor: pointer; font-weight: 600; font-size: 11px; }
+.btn:disabled { opacity: .35; cursor: not-allowed; }
+.btn-primary { background: #18a0fb; color: #fff; }
+.btn-primary:hover:not(:disabled) { background: #0d8de8; }
+.btn-secondary { background: #333; color: #bbb; border: 1px solid #444; }
+.btn-secondary:hover:not(:disabled) { background: #3d3d3d; }
+.btn-full { width: 100%; }
+.btn-big { background: linear-gradient(135deg,#1bc47d,#16a066); color: #fff; font-size: 13px; padding: 12px; width: 100%; border-radius: 7px; border: none; cursor: pointer; font-weight: 700; }
+.btn-big:hover:not(:disabled) { filter: brightness(1.1); }
+.btn-big:disabled { opacity: .35; cursor: not-allowed; }
+/* +/- buttons usados pelos steppers do Passo 5 */
+.btn-adj { width: 26px; height: 26px; border-radius: 5px; border: 1px solid #444; background: #2e2e2e; color: #ccc; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; }
+.btn-adj:hover { background: #3a3a3a; color: #fff; }
+.btn-adj:active { background: #18a0fb; color: #fff; border-color: #18a0fb; }
+/* Stepper editável: [−] [caixa digitável] [+] — os 3 campos do Passo 5 usam isto.
+   Botões para ajuste fino; a caixa central aceita digitação direta p/ saltos grandes. */
+.num-stepper { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+.num-stepper input[type=number] { width: 54px; text-align: center; color: #fff; font-weight: 700; padding: 5px 4px; -moz-appearance: textfield; }
+/* Remove as setas nativas do input number — o ajuste é feito pelos botões +/− */
+.num-stepper input[type=number]::-webkit-outer-spin-button,
+.num-stepper input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+/* × button for image slot removal */
+.btn-rm { width: 20px; height: 20px; border-radius: 3px; border: none; background: rgba(255,90,90,.12); color: #ff7a7a; cursor: pointer; font-size: 12px; line-height: 1; display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 0; }
+.btn-rm:hover { background: rgba(255,90,90,.25); }
+.dz { position: relative; border: 2px dashed #3a3a3a; border-radius: 7px; padding: 22px 16px; text-align: center; cursor: pointer; transition: border-color .2s; }
+.dz:hover { border-color: #18a0fb; background: rgba(24,160,251,.04); }
+.dz input[type=file] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.dz-icon { font-size: 26px; margin-bottom: 6px; }
+.dz-title { color: #ccc; font-weight: 600; font-size: 12px; }
+.dz-sub { color: #555; font-size: 10px; margin-top: 3px; }
+.tbl-wrap { overflow: auto; max-height: 150px; border-radius: 5px; border: 1px solid #333; }
+table { width: 100%; border-collapse: collapse; }
+th { background: #1e1e1e; color: #666; font-size: 10px; padding: 4px 7px; text-align: left; border-bottom: 1px solid #333; position: sticky; top: 0; }
+td { padding: 4px 7px; border-bottom: 1px solid #2a2a2a; color: #bbb; font-size: 11px; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+label { color: #777; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .3px; display: block; margin-bottom: 3px; }
+input[type=number], select { background: #1e1e1e; border: 1px solid #3a3a3a; color: #ddd; border-radius: 4px; padding: 5px 7px; width: 100%; font-size: 11px; font-family: inherit; outline: none; }
+input[type=number]:focus, select:focus { border-color: #18a0fb; }
+select option { background: #1e1e1e; }
+/* Checkbox labels */
+.chk-label { display: flex; align-items: center; gap: 6px; color: #bbb; font-size: 11px; text-transform: none; letter-spacing: 0; font-weight: 400; cursor: pointer; user-select: none; }
+.chk-label input[type=checkbox] { width: 13px; height: 13px; cursor: pointer; accent-color: #18a0fb; flex-shrink: 0; }
+/* Passo 5 — cada campo numérico em sua própria linha: label à esquerda, stepper à direita.
+   Pilha vertical garante caber na largura estreita da janela do plugin. */
+.g-p5 { display: flex; flex-direction: column; gap: 9px; }
+.g-p5 .field-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.g-p5 .field-row > label { margin-bottom: 0; flex: 1; min-width: 0; }
+/* Grid for text mappings */
+.map-row { display: grid; grid-template-columns: 1fr 14px 1fr; gap: 6px; align-items: center; margin-bottom: 6px; }
+/* Grid for image slot rows: col → layer scale × */
+.imap-row { display: grid; grid-template-columns: 1fr 14px 1fr 54px 22px; gap: 5px; align-items: center; margin-bottom: 5px; }
+.arrow { text-align: center; color: #444; font-size: 12px; }
+.col-name { background: #1e1e1e; border: 1px solid #333; border-radius: 4px; padding: 5px 7px; color: #aaa; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tag { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin: 2px; }
+.tag-t { background: rgba(24,160,251,.15);  color: #18a0fb; }
+.tag-i { background: rgba(27,196,125,.15);  color: #1bc47d; }
+.tag-o { background: rgba(255,255,255,.07); color: #555; }
+.box-ok  { background: rgba(27,196,125,.08); border-left: 3px solid #1bc47d; padding: 8px 10px; border-radius: 0 5px 5px 0; color: #999; margin-bottom: 8px; }
+.box-err { background: rgba(255,90,90,.08);  border-left: 3px solid #ff5a5a; padding: 8px 10px; border-radius: 0 5px 5px 0; color: #ff8888; margin-bottom: 8px; }
+.box-inf { background: rgba(24,160,251,.08); border-left: 3px solid #18a0fb; padding: 8px 10px; border-radius: 0 5px 5px 0; color: #999; margin-bottom: 8px; line-height: 1.6; }
+.box-wrn { background: rgba(255,188,64,.08); border-left: 3px solid #ffbc40; padding: 8px 10px; border-radius: 0 5px 5px 0; color: #999; margin-bottom: 8px; }
+.layer-item { display: flex; align-items: center; justify-content: space-between; padding: 3px 7px; background: #1e1e1e; border-radius: 3px; margin-bottom: 2px; }
+.layer-name { color: #bbb; font-size: 11px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scroll { max-height: 150px; overflow-y: auto; }
+.chips { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; max-height: 120px; overflow-y: auto; }
+.chip { padding: 2px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap; max-width: 200px; overflow: hidden; text-overflow: ellipsis; cursor: default; }
+.chip-ok  { background: rgba(27,196,125,.12); color: #1bc47d; }
+.chip-err { background: rgba(255,90,90,.12);  color: #ff7a7a; }
+.chip-big { background: rgba(255,188,64,.15); color: #ffbc40; }
+.slot-header { font-size: 9px; font-weight: 700; color: #444; text-transform: uppercase; letter-spacing: .4px; margin: 8px 0 4px; }
+.slot-header:first-child { margin-top: 0; }
+.prog-track { background: #1e1e1e; border-radius: 4px; height: 6px; overflow: hidden; margin-top: 5px; }
+.prog-fill  { height: 100%; background: #18a0fb; border-radius: 4px; transition: width .15s; }
+#footer { padding: 10px 14px; background: #161616; border-top: 1px solid #333; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+#step-label { color: #555; font-size: 10px; }
+</style>
+</head>
+<body>
+
+<div id="stepbar">
+  <div class="stp active" id="stp1">1</div><div class="stp-line" id="ln1"></div>
+  <div class="stp" id="stp2">2</div><div class="stp-line" id="ln2"></div>
+  <div class="stp" id="stp3">3</div><div class="stp-line" id="ln3"></div>
+  <div class="stp" id="stp4">4</div><div class="stp-line" id="ln4"></div>
+  <div class="stp" id="stp5">5</div>
+  <span id="step-title">CSV</span>
+</div>
+
+<div id="content">
+
+<!-- ═══ P1 CSV ══════════════════════════════════════════════════ -->
+<div class="panel active" id="p1">
+  <h2>📊 Planilha CSV</h2>
+  <p class="sub">Exporte do Google Sheets: <strong style="color:#ccc">Arquivo → Fazer download → CSV</strong> e carregue aqui.</p>
+  <div class="dz">
+    <input type="file" id="f-csv" accept=".csv,.txt">
+    <div class="dz-icon">📂</div>
+    <div class="dz-title">Clique para selecionar o CSV</div>
+    <div class="dz-sub">ou arraste o arquivo aqui</div>
+  </div>
+  <div id="p1-ok" style="display:none; margin-top:10px;">
+    <div class="box-ok">✅ <strong id="csv-name"></strong> — <span id="csv-info"></span></div>
+    <div class="card"><div class="card-title">Colunas</div><div id="csv-tags"></div></div>
+    <div class="card">
+      <div class="card-title">Pré-visualização</div>
+      <div class="tbl-wrap"><table><thead id="csv-th"></thead><tbody id="csv-tb"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ P2 TEMPLATE ═════════════════════════════════════════════ -->
+<div class="panel" id="p2">
+  <h2>📐 Frame Template</h2>
+  <p class="sub">Selecione o frame template no Figma e clique abaixo. Se o frame tiver um nome padrão reconhecido, ele é detectado automaticamente.</p>
+  <div class="box-inf">💡 Camada de texto chamada <strong style="color:#ddd">Marca</strong> recebe a coluna <strong style="color:#ddd">Marca</strong>. Para imagem, o nome pode ser qualquer um — você mapeia no Passo 3.</div>
+  <div id="p2-auto-hint" class="box-ok" style="display:none; margin-bottom:8px;">
+    🎯 Frame detectado automaticamente pelo nome.
+  </div>
+  <button class="btn btn-primary btn-full" id="btn-sel" style="margin-bottom:10px;">📌 Usar Frame Selecionado no Figma</button>
+  <div id="p2-err" class="box-err" style="display:none;"></div>
+  <div id="p2-ok" style="display:none;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong id="tpl-name" style="color:#fff;"></strong>
+        <span id="tpl-size" style="color:#555;font-size:10px;"></span>
+      </div>
+      <div class="card-title">Camadas</div>
+      <div class="scroll" id="tpl-layers"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ P3 MAPEAMENTO ════════════════════════════════════════════ -->
+<div class="panel" id="p3">
+  <h2>🔗 Mapeamento</h2>
+  <p class="sub">Conecte cada coluna CSV à camada correta no frame.</p>
+
+  <!-- Texto -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="card-title" style="margin:0;">Campos de Texto</div>
+      <button class="btn btn-secondary" id="btn-auto" style="font-size:10px;padding:3px 9px;">✨ Auto-mapear</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 14px 1fr;gap:6px;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid #333;">
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Coluna CSV</span>
+      <span></span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Camada Figma</span>
+    </div>
+    <div id="text-maps"></div>
+  </div>
+
+  <!-- Imagem (múltiplos slots) -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div class="card-title" style="margin:0;">Campos de Imagem</div>
+      <button class="btn btn-secondary" id="btn-add-slot" style="font-size:10px;padding:3px 9px;">＋ Adicionar slot</button>
+    </div>
+    <!-- Cabeçalho das colunas -->
+    <div style="display:grid;grid-template-columns:1fr 14px 1fr 54px 22px;gap:5px;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #2a2a2a;">
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Coluna CSV</span>
+      <span></span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Camada Figma</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Modo</span>
+      <span></span>
+    </div>
+    <div id="imap-slots"></div>
+    <div id="imap-empty" style="color:#444;font-size:10px;padding:4px 0;display:none;">
+      Nenhum slot de imagem. Clique em <strong style="color:#555;">＋ Adicionar slot</strong> ou use Auto-mapear.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ P4 IMAGENS ═══════════════════════════════════════════════ -->
+<div class="panel" id="p4">
+  <h2>🖼️ Imagens</h2>
+  <p class="sub">Selecione a pasta com <strong style="color:#ccc">todas</strong> as imagens. Apenas as que tiverem correspondência nos slots configurados serão carregadas.</p>
+  <div class="box-inf">
+    💡 <strong style="color:#ddd;">Matching inteligente:</strong> ignora caracteres especiais, espaços extras, *, #, _, / e similares — só letras e números importam na comparação. Imagens acima de <strong style="color:#ddd;" id="p4-limit-label"></strong> são puladas (chip laranja).
+  </div>
+  <div class="dz">
+    <input type="file" id="f-imgs" multiple accept="image/*" webkitdirectory>
+    <div class="dz-icon">🗂️</div>
+    <div class="dz-title">Clique para selecionar a pasta de imagens</div>
+    <div class="dz-sub">JPG, PNG, WEBP — subpastas incluídas automaticamente</div>
+  </div>
+  <div id="p4-loading" style="display:none; margin-top:10px; color:#555; font-size:11px;">⏳ Filtrando imagens...</div>
+  <div id="p4-ok" style="display:none; margin-top:10px;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span><strong id="img-total-found" style="color:#fff;"></strong> <span style="color:#555;">arquivos na pasta</span></span>
+        <span style="color:#1bc47d;font-size:10px;font-weight:700;"><span id="img-matches"></span> serão inseridas</span>
+      </div>
+      <div id="p4-oversized-wrap" style="display:none; margin-bottom:8px;" class="box-wrn">
+        ⚠️ <span id="p4-oversized-msg"></span>
+      </div>
+      <div class="card-title">
+        Status por produto —
+        <span style="color:#1bc47d;">■ ok</span>
+        <span style="color:#ffbc40; margin-left:4px;">■ grande</span>
+        <span style="color:#ff7a7a; margin-left:4px;">■ não encontrada</span>
+      </div>
+      <div id="p4-slots-status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ P5 GERAR ═════════════════════════════════════════════════ -->
+<div class="panel" id="p5">
+  <h2>🚀 Configurar e Gerar</h2>
+  <p class="sub">Configure o layout da grade e gere os frames do catálogo.</p>
+
+  <div class="card">
+    <div class="card-title">Grade</div>
+    <div class="g-p5">
+      <!-- Por linha — stepper editável: botões p/ ajuste fino + caixa p/ digitar -->
+      <div class="field-row">
+        <label>Por linha</label>
+        <div class="num-stepper">
+          <button class="btn-adj" id="btn-cols-minus" type="button">−</button>
+          <input type="number" id="g-cols" value="5" min="1" step="1">
+          <button class="btn-adj" id="btn-cols-plus" type="button">+</button>
+        </div>
+      </div>
+      <!-- Espaço X (horizontal) — mesmo stepper editável -->
+      <div class="field-row">
+        <label>Espaço X — horizontal (px)</label>
+        <div class="num-stepper">
+          <button class="btn-adj" id="btn-cg-minus" type="button">−</button>
+          <input type="number" id="g-cg" value="55" min="0" step="5">
+          <button class="btn-adj" id="btn-cg-plus" type="button">+</button>
+        </div>
+      </div>
+      <!-- Espaço Y (vertical) — mesmo stepper editável -->
+      <div class="field-row">
+        <label>Espaço Y — vertical (px)</label>
+        <div class="num-stepper">
+          <button class="btn-adj" id="btn-rg-minus" type="button">−</button>
+          <input type="number" id="g-rg" value="50" min="0" step="5">
+          <button class="btn-adj" id="btn-rg-plus" type="button">+</button>
+        </div>
+      </div>
+    </div>
+    <div id="grid-info" style="margin-top:8px;color:#555;font-size:11px;"></div>
+  </div>
+
+  <!-- Opções de template -->
+  <!-- ═══════════════════════════════════════════════════════════════
+       CONFIG — PADRÃO DOS CHECKBOXES DE TEMPLATE
+       Para alterar os valores padrão, edite as duas constantes no JS:
+         DEFAULT_HIDE_TEMPLATE   (true = marcado, false = desmarcado)
+         DEFAULT_DELETE_TEMPLATE (true = marcado, false = desmarcado)
+       Estão logo no início do bloco <script>, claramente marcadas.
+       ═══════════════════════════════════════════════════════════════ -->
+  <div class="card">
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <label class="chk-label" id="lbl-hide">
+        <input type="checkbox" id="hide-tpl"> Ocultar template após gerar
+      </label>
+      <label class="chk-label">
+        <input type="checkbox" id="del-tpl"> Excluir template após gerar
+      </label>
+    </div>
+    <div id="del-warn" style="display:none;margin-top:7px;font-size:10px;color:#ff9944;">
+      ⚠️ O frame template será <strong>removido permanentemente</strong> do Figma após a geração.
+    </div>
+  </div>
+
+  <div class="card" id="gen-summary"></div>
+
+  <button class="btn btn-big" id="btn-gen">⚡ Gerar Catálogo</button>
+
+  <div id="gen-prog" style="display:none;margin-top:10px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
+      <span style="color:#666;">Gerando frames...</span>
+      <span id="prog-txt" style="color:#18a0fb;font-weight:700;"></span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div id="gen-done" style="display:none;margin-top:10px;" class="card">
+    <div style="text-align:center;padding:10px 0;">
+      <div style="font-size:28px;margin-bottom:6px;">✅</div>
+      <div style="color:#1bc47d;font-weight:700;font-size:14px;"><span id="done-n"></span> frames gerados!</div>
+      <div style="color:#555;margin-top:4px;font-size:11px;">Todos selecionados no Figma.</div>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="resetGen()">🔄 Gerar novamente</button>
+    </div>
+  </div>
+  <div id="gen-err" class="box-err" style="display:none;margin-top:10px;"></div>
+</div>
+
+</div><!-- #content -->
+
+<div id="footer">
+  <button class="btn btn-secondary" id="btn-back" onclick="nav(-1)" disabled>← Voltar</button>
+  <span id="step-label">Passo 1 de 5</span>
+  <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Próximo →</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  CONFIG — altere os valores abaixo conforme necessário
+// ══════════════════════════════════════════════════════════════════
+
+// Nomes de frame que são auto-detectados ao entrar no Passo 2.
+// Acrescente ou remova nomes aqui (sempre em letras minúsculas).
+var TEMPLATE_NAMES = [
+  'template', 'template produto', 'produto', 'produtos',
+  'modelo produto', 'modelo produtos',
+  'modelo de produto', 'modelo de produtos'
+];
+
+// Limite de tamanho de imagem. Imagens acima deste valor recebem
+// chip laranja e são puladas na geração — adicione manualmente no Figma.
+var SIZE_LIMIT_MB    = 4;          // ← altere este número
+var SIZE_LIMIT_BYTES = SIZE_LIMIT_MB * 1024 * 1024;
+
+// Padrão dos checkboxes de template no Passo 5.
+// true = marcado por padrão, false = desmarcado.
+var DEFAULT_HIDE_TEMPLATE   = false;  // ← mude aqui: Ocultar template
+var DEFAULT_DELETE_TEMPLATE = true;   // ← mude aqui: Excluir template
+
+// ══════════════════════════════════════════════════════════════════
+//  ESTADO GLOBAL
+// ══════════════════════════════════════════════════════════════════
+var CUR   = 1;
+var CSV   = { rows: [], cols: [], filename: '' };
+var TPL   = null;
+var TMAPS = []; // [{ col, layer }]
+var IMAPS = []; // [{ col, layer, scale }]  — múltiplos slots de imagem
+var IMGS  = []; // IMGS[slotIdx] = { imgsKey: ArrayBuffer }
+
+var TITLES = ['CSV', 'Template', 'Mapeamento', 'Imagens', 'Gerar'];
+
+// ══════════════════════════════════════════════════════════════════
+//  FUNÇÕES DE NORMALIZAÇÃO
+// ══════════════════════════════════════════════════════════════════
+
+// normName — idêntico a norm() do code.js: só trim + lowercase.
+// NÃO colapsa espaços múltiplos para manter compatibilidade exata
+// com o que code.js usa como chave ao buscar em images[].
+// Ex.: "ARM ACO  AMEIXA" (dois espaços) → "arm aco  ameixa"
+function normName(s) {
+  return String(s).trim().toLowerCase();
+}
+
+// normForMatch — para comparar nome de arquivo com valor do CSV.
+// Remove TUDO que não seja letra ou número antes de comparar,
+// resolvendo *, /, #, _, espaços extras e qualquer outro carácter
+// especial que o Windows remove ou substitui em nomes de arquivo.
+// Ex.: "BRANCO*"   → "branco"  |  "P/LAVATORIO" → "plavatorio"
+//      "ARM ACO  AMEIXA" → "armacameixa"  (dois espaços tratados)
+function normForMatch(s) {
+  return String(s).trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  NAVEGAÇÃO
+// ══════════════════════════════════════════════════════════════════
+function nav(d) {
+  var t = CUR + d;
+  if (d > 0 && !canGo()) return;
+  // Pular P4 se nenhum slot de imagem configurado
+  if (d > 0 && CUR === 3 && !hasAnyImageSlot()) t = 5;
+  if (d < 0 && CUR === 5 && !hasAnyImageSlot()) t = 3;
+  if (t < 1 || t > 5) return;
+  showStep(t);
+}
+
+function canGo() {
+  if (CUR === 1 && !CSV.rows.length) { alert('Carregue o CSV primeiro.'); return false; }
+  if (CUR === 2 && !TPL)             { alert('Selecione um frame template primeiro.'); return false; }
+  return true;
+}
+
+function hasAnyImageSlot() {
+  for (var i = 0; i < IMAPS.length; i++) {
+    if (IMAPS[i].col && IMAPS[i].layer) return true;
+  }
+  return false;
+}
+
+function showStep(n) {
+  document.getElementById('p' + CUR).className = 'panel';
+  var prev = document.getElementById('stp' + CUR);
+  prev.className = 'stp' + (n > CUR ? ' done' : '');
+  CUR = n;
+  document.getElementById('p' + CUR).className = 'panel active';
+  document.getElementById('stp' + CUR).className = 'stp active';
+  for (var i = 1; i <= 4; i++) {
+    document.getElementById('ln' + i).className = 'stp-line' + (i < CUR ? ' done' : '');
+  }
+  document.getElementById('btn-back').disabled = (CUR === 1);
+  document.getElementById('btn-next').style.display = (CUR === 5) ? 'none' : '';
+  document.getElementById('step-label').textContent = 'Passo ' + CUR + ' de 5';
+  document.getElementById('step-title').textContent = TITLES[CUR - 1];
+
+  if (CUR === 2) onEnterP2();
+  if (CUR === 3) buildMaps();
+  if (CUR === 4) onEnterP4();
+  if (CUR === 5) buildGen();
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  P1 — CSV
+// ══════════════════════════════════════════════════════════════════
+function parseCSV(txt) {
+  txt = txt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  var lines = txt.split('\n');
+  var result = [];
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (!line.trim()) continue;
+    var row = [], cur = '', inQ = false;
+    for (var j = 0; j < line.length; j++) {
+      var c = line[j];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { row.push(cur.trim()); cur = ''; }
+      else { cur += c; }
+    }
+    row.push(cur.trim());
+    result.push(row);
+  }
+  if (!result.length) return null;
+  var cols = result[0];
+  var rows = [];
+  for (var i = 1; i < result.length; i++) {
+    var r = result[i], skip = true;
+    for (var j = 0; j < r.length; j++) { if (r[j]) { skip = false; break; } }
+    if (skip) continue;
+    var obj = {};
+    for (var j = 0; j < cols.length; j++) { obj[cols[j]] = r[j] || ''; }
+    rows.push(obj);
+  }
+  return { cols: cols, rows: rows };
+}
+
+document.getElementById('f-csv').onchange = function(e) {
+  var f = e.target.files[0]; if (!f) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    var parsed = parseCSV(ev.target.result);
+    if (!parsed || !parsed.cols.length) { alert('CSV inválido ou vazio!'); return; }
+    CSV = { rows: parsed.rows, cols: parsed.cols, filename: f.name };
+    // Resetar mapeamentos quando CSV mudar
+    TMAPS = []; IMAPS = []; IMGS = [];
+    renderCSV();
+  };
+  reader.readAsText(f, 'UTF-8');
+};
+
+function renderCSV() {
+  document.getElementById('csv-name').textContent = CSV.filename;
+  document.getElementById('csv-info').textContent = CSV.rows.length + ' produtos, ' + CSV.cols.length + ' colunas';
+  document.getElementById('csv-tags').innerHTML = CSV.cols.map(function(c) {
+    return '<span class="tag tag-t">' + esc(c) + '</span>';
+  }).join('');
+  document.getElementById('csv-th').innerHTML = '<tr>' + CSV.cols.map(function(c) {
+    return '<th>' + esc(c) + '</th>';
+  }).join('') + '</tr>';
+  document.getElementById('csv-tb').innerHTML = CSV.rows.slice(0, 5).map(function(r) {
+    return '<tr>' + CSV.cols.map(function(c) {
+      return '<td title="' + esc(r[c] || '') + '">' + esc(r[c] || '') + '</td>';
+    }).join('') + '</tr>';
+  }).join('');
+  document.getElementById('p1-ok').style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  P2 — TEMPLATE
+// ══════════════════════════════════════════════════════════════════
+
+// Quando entra no P2, dispara get-selection automaticamente.
+// Se o frame tiver um nome da lista TEMPLATE_NAMES, exibe hint de auto-detecção.
+function onEnterP2() {
+  parent.postMessage({ pluginMessage: { type: 'get-selection' } }, '*');
+}
+
+document.getElementById('btn-sel').onclick = function() {
+  document.getElementById('p2-auto-hint').style.display = 'none';
+  parent.postMessage({ pluginMessage: { type: 'get-selection' } }, '*');
+};
+
+function renderTpl(data, autoDetected) {
+  TPL = data;
+  document.getElementById('p2-err').style.display  = 'none';
+  document.getElementById('p2-auto-hint').style.display = autoDetected ? 'block' : 'none';
+  document.getElementById('tpl-name').textContent = data.name;
+  document.getElementById('tpl-size').textContent = Math.round(data.w) + ' × ' + Math.round(data.h) + ' px';
+  var html = '';
+  for (var i = 0; i < data.layers.length; i++) {
+    var l = data.layers[i];
+    var cls = l.type === 'TEXT' ? 'tag-t'
+            : (l.type === 'RECTANGLE' || l.type === 'FRAME' || l.type === 'ELLIPSE') ? 'tag-i'
+            : 'tag-o';
+    html += '<div class="layer-item"><span class="layer-name">' + esc(l.name) + '</span><span class="tag ' + cls + '" style="font-size:9px;">' + l.type + '</span></div>';
+  }
+  document.getElementById('tpl-layers').innerHTML = html || '<div style="color:#444;padding:4px;">Nenhuma sub-camada.</div>';
+  document.getElementById('p2-ok').style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  P3 — MAPEAMENTO
+// ══════════════════════════════════════════════════════════════════
+function buildMaps() {
+  if (!TPL) return;
+  var textLayers  = TPL.layers.filter(function(l) { return l.type === 'TEXT'; });
+  var otherLayers = TPL.layers.filter(function(l) { return l.type !== 'TEXT'; });
+
+  // Inicializar TMAPS só na primeira entrada
+  if (TMAPS.length !== CSV.cols.length) {
+    TMAPS = CSV.cols.map(function(c) { return { col: c, layer: '' }; });
+    autoMapText(textLayers);
+  }
+
+  // Inicializar IMAPS só na primeira entrada
+  if (IMAPS.length === 0) {
+    autoMapImages(otherLayers);
+  }
+
+  renderTextMaps(textLayers);
+  renderImapSlots(otherLayers);
+}
+
+// ── Auto-mapear texto: coluna CSV com mesmo nome que camada TEXT ──
+function autoMapText(textLayers) {
+  for (var i = 0; i < TMAPS.length; i++) {
+    var cn = normName(TMAPS[i].col);
+    for (var j = 0; j < textLayers.length; j++) {
+      if (normName(textLayers[j].name) === cn) { TMAPS[i].layer = textLayers[j].name; break; }
+    }
+  }
+}
+
+// ── Auto-mapear imagens: camadas não-TEXT com nome igual a coluna CSV ──
+// Lógica:
+//   • Para cada camada não-TEXT, verifica se há coluna CSV com nome idêntico (norm).
+//   • Se encontrar 1 ou mais pares → cria um slot por par.
+//   • Se não encontrar nenhum par → cria 1 slot vazio para mapeamento manual.
+function autoMapImages(otherLayers) {
+  var matched = [];
+  for (var j = 0; j < otherLayers.length; j++) {
+    var ln = normName(otherLayers[j].name);
+    for (var i = 0; i < CSV.cols.length; i++) {
+      if (normName(CSV.cols[i]) === ln) {
+        matched.push({ col: CSV.cols[i], layer: otherLayers[j].name, scale: 'FIT' });
+        break;
+      }
+    }
+  }
+  IMAPS = matched.length > 0 ? matched : [{ col: '', layer: '', scale: 'FIT' }];
+}
+
+function renderTextMaps(textLayers) {
+  var tOpts = '<option value="">— não mapear —</option>' + textLayers.map(function(l) {
+    return '<option value="' + esc(l.name) + '">' + esc(l.name) + '</option>';
+  }).join('');
+
+  var html = '';
+  for (var i = 0; i < TMAPS.length; i++) {
+    html += '<div class="map-row">';
+    html += '<div class="col-name" title="' + esc(TMAPS[i].col) + '">' + esc(TMAPS[i].col) + '</div>';
+    html += '<div class="arrow">→</div>';
+    html += '<select data-ti="' + i + '">' + tOpts + '</select>';
+    html += '</div>';
+  }
+  document.getElementById('text-maps').innerHTML = html;
+
+  var sels = document.getElementById('text-maps').querySelectorAll('select');
+  for (var i = 0; i < sels.length; i++) {
+    (function(idx, sel) {
+      if (TMAPS[idx].layer) sel.value = TMAPS[idx].layer;
+      sel.onchange = function() { TMAPS[idx].layer = sel.value; };
+    })(i, sels[i]);
+  }
+}
+
+function renderImapSlots(otherLayers) {
+  if (!otherLayers) {
+    otherLayers = TPL ? TPL.layers.filter(function(l) { return l.type !== 'TEXT'; }) : [];
+  }
+
+  var lOpts = '<option value="">— camada —</option>' + otherLayers.map(function(l) {
+    return '<option value="' + esc(l.name) + '">' + esc(l.name) + ' (' + l.type + ')</option>';
+  }).join('');
+  var cOpts = '<option value="">— coluna —</option>' + CSV.cols.map(function(c) {
+    return '<option value="' + esc(c) + '">' + esc(c) + '</option>';
+  }).join('');
+
+  var html = '';
+  for (var i = 0; i < IMAPS.length; i++) {
+    html += '<div class="imap-row" data-ii="' + i + '">';
+    html += '<select class="imap-c">' + cOpts + '</select>';
+    html += '<div class="arrow">→</div>';
+    html += '<select class="imap-l">' + lOpts + '</select>';
+    html += '<select class="imap-s"><option value="FIT">Fit</option><option value="FILL">Fill</option></select>';
+    html += '<button class="btn-rm" title="Remover slot" onclick="removeSlot(' + i + ')">×</button>';
+    html += '</div>';
+  }
+  document.getElementById('imap-slots').innerHTML = html;
+  document.getElementById('imap-empty').style.display = IMAPS.length ? 'none' : 'block';
+
+  // Vincular valores e handlers
+  var rows = document.getElementById('imap-slots').querySelectorAll('.imap-row');
+  for (var i = 0; i < rows.length; i++) {
+    (function(idx, row) {
+      var cs = row.querySelector('.imap-c');
+      var ls = row.querySelector('.imap-l');
+      var ss = row.querySelector('.imap-s');
+      if (IMAPS[idx].col)   cs.value = IMAPS[idx].col;
+      if (IMAPS[idx].layer) ls.value = IMAPS[idx].layer;
+      if (IMAPS[idx].scale) ss.value = IMAPS[idx].scale;
+      cs.onchange = function() { IMAPS[idx].col   = cs.value; IMGS = []; };
+      ls.onchange = function() { IMAPS[idx].layer = ls.value; };
+      ss.onchange = function() { IMAPS[idx].scale = ss.value; };
+    })(i, rows[i]);
+  }
+}
+
+function removeSlot(idx) {
+  IMAPS.splice(idx, 1);
+  IMGS = [];
+  renderImapSlots();
+}
+
+document.getElementById('btn-add-slot').onclick = function() {
+  IMAPS.push({ col: '', layer: '', scale: 'FIT' });
+  renderImapSlots();
+};
+
+document.getElementById('btn-auto').onclick = function() {
+  if (!TPL) return;
+  var textLayers  = TPL.layers.filter(function(l) { return l.type === 'TEXT'; });
+  var otherLayers = TPL.layers.filter(function(l) { return l.type !== 'TEXT'; });
+  // Reset completo para re-auto-mapear
+  TMAPS = CSV.cols.map(function(c) { return { col: c, layer: '' }; });
+  IMAPS = [];
+  IMGS  = [];
+  autoMapText(textLayers);
+  autoMapImages(otherLayers);
+  renderTextMaps(textLayers);
+  renderImapSlots(otherLayers);
+  var b = document.getElementById('btn-auto');
+  b.textContent = '✅ Feito!';
+  setTimeout(function() { b.textContent = '✨ Auto-mapear'; }, 1800);
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  P4 — IMAGENS
+// ══════════════════════════════════════════════════════════════════
+
+// Monta o dicionário de produtos esperados para um slot.
+// Estrutura:
+//   normForMatch(v)  →  { imgsKey: normName(v),  display: v }
+//       ↑                     ↑                      ↑
+//  chave de busca       chave que code.js        nome para exibir
+//  (só letras+números)  busca em images[]         nos chips
+function buildCsvImageSet(slotIdx) {
+  var set = {};
+  var col = IMAPS[slotIdx] && IMAPS[slotIdx].col;
+  if (!col) return set;
+  for (var i = 0; i < CSV.rows.length; i++) {
+    var v = (CSV.rows[i][col] || '').trim();
+    if (!v) continue;
+    var matchKey = normForMatch(v); // chave para comparar com arquivo
+    var imgsKey  = normName(v);    // chave idêntica ao norm() do code.js
+    if (!set[matchKey]) {
+      set[matchKey] = { imgsKey: imgsKey, display: v };
+    }
+  }
+  return set;
+}
+
+function onEnterP4() {
+  document.getElementById('p4-limit-label').textContent = SIZE_LIMIT_MB + ' MB';
+  document.getElementById('p4-ok').style.display = 'none';
+  document.getElementById('p4-loading').style.display = 'none';
+}
+
+document.getElementById('f-imgs').onchange = function(e) {
+  var allFiles = Array.prototype.slice.call(e.target.files).filter(function(f) {
+    return f.type && f.type.indexOf('image/') === 0;
+  });
+  if (!allFiles.length) return;
+
+  document.getElementById('p4-loading').style.display = 'block';
+  document.getElementById('p4-ok').style.display = 'none';
+
+  // Um csvSet por slot
+  var csvSets = IMAPS.map(function(_, idx) { return buildCsvImageSet(idx); });
+
+  // Reinicializar IMGS como array de dicts vazios
+  IMGS = IMAPS.map(function() { return {}; });
+  var oversized = IMAPS.map(function() { return {}; });
+  var toLoad = []; // [{ file, slotIdx, key }]
+
+  for (var i = 0; i < allFiles.length; i++) {
+    var f     = allFiles[i];
+    var fname = f.name;
+    var dot   = fname.lastIndexOf('.');
+    var base  = dot > 0 ? fname.substring(0, dot) : fname;
+    var fKey  = normForMatch(base);
+
+    for (var s = 0; s < IMAPS.length; s++) {
+      if (!csvSets[s]) continue;
+      var entry = csvSets[s][fKey];
+      if (entry) {
+        if (f.size > SIZE_LIMIT_BYTES) {
+          oversized[s][entry.imgsKey] = entry.display;
+        } else {
+          toLoad.push({ file: f, slotIdx: s, key: entry.imgsKey });
+        }
+        break; // mesmo arquivo não precisa ser verificado mais de uma vez por slot
+      }
+    }
+  }
+
+  if (!toLoad.length) {
+    document.getElementById('p4-loading').style.display = 'none';
+    renderImgStatus(allFiles.length, 0, csvSets, oversized);
+    return;
+  }
+
+  var done = 0;
+  for (var i = 0; i < toLoad.length; i++) {
+    (function(item) {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        // ArrayBuffer puro — sem compressão, sem canvas, sem corrupção de transparência
+        IMGS[item.slotIdx][item.key] = ev.target.result;
+        done++;
+        if (done === toLoad.length) {
+          document.getElementById('p4-loading').style.display = 'none';
+          var total = 0;
+          for (var s = 0; s < IMGS.length; s++) total += Object.keys(IMGS[s]).length;
+          renderImgStatus(allFiles.length, total, csvSets, oversized);
+        }
+      };
+      reader.readAsArrayBuffer(item.file);
+    })(toLoad[i]);
+  }
+};
+
+// Exibe status por slot. Se só 1 slot, exibe sem header de slot.
+function renderImgStatus(totalFiles, matchCount, csvSets, oversized) {
+  document.getElementById('img-total-found').textContent = totalFiles;
+  document.getElementById('img-matches').textContent = matchCount;
+
+  var totalOversized = 0;
+  for (var s = 0; s < oversized.length; s++) totalOversized += Object.keys(oversized[s]).length;
+
+  if (totalOversized > 0) {
+    document.getElementById('p4-oversized-msg').textContent =
+      totalOversized + ' imagem(ns) encontrada(s) mas acima de ' + SIZE_LIMIT_MB +
+      ' MB — serão puladas. Adicione manualmente no Figma (duplo clique no frame).';
+    document.getElementById('p4-oversized-wrap').style.display = 'block';
+  } else {
+    document.getElementById('p4-oversized-wrap').style.display = 'none';
+  }
+
+  var multiSlot = IMAPS.filter(function(m) { return m.col && m.layer; }).length > 1;
+  var html = '';
+
+  for (var s = 0; s < IMAPS.length; s++) {
+    if (!IMAPS[s].col || !IMAPS[s].layer) continue;
+    var set = csvSets[s] || {};
+    var slotImgs = IMGS[s] || {};
+    var slotOver = oversized[s] || {};
+
+    if (multiSlot) {
+      html += '<div class="slot-header">Slot ' + (s + 1) + ': ' + esc(IMAPS[s].col) + ' → ' + esc(IMAPS[s].layer) + '</div>';
+    }
+    html += '<div class="chips" style="margin-top:' + (multiSlot ? '0' : '5px') + ';">';
+    for (var mk in set) {
+      var entry  = set[mk];
+      var loaded = slotImgs[entry.imgsKey] !== undefined;
+      var big    = slotOver[entry.imgsKey] !== undefined;
+      var cls    = loaded ? 'chip-ok' : (big ? 'chip-big' : 'chip-err');
+      var tip    = big ? 'Acima de ' + SIZE_LIMIT_MB + ' MB — adicione manualmente' : entry.display;
+      html += '<span class="chip ' + cls + '" title="' + esc(tip) + '">' + esc(entry.display) + '</span>';
+    }
+    html += '</div>';
+  }
+
+  document.getElementById('p4-slots-status').innerHTML = html;
+  document.getElementById('p4-ok').style.display = 'block';
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  P5 — GERAR
+// ══════════════════════════════════════════════════════════════════
+function buildGen() {
+  updateGridInfo();
+
+  // Aplicar padrões dos checkboxes (só na primeira vez — se já tiver sido alterado pelo usuário, mantém)
+  if (!document.getElementById('hide-tpl').dataset.touched) {
+    document.getElementById('hide-tpl').checked = DEFAULT_HIDE_TEMPLATE;
+  }
+  if (!document.getElementById('del-tpl').dataset.touched) {
+    document.getElementById('del-tpl').checked = DEFAULT_DELETE_TEMPLATE;
+    updateDelWarn();
+  }
+
+  var mapped    = TMAPS.filter(function(m) { return m.layer; }).length;
+  var imgSlots  = IMAPS.filter(function(m) { return m.col && m.layer; }).length;
+  var totalImgs = 0;
+  for (var s = 0; s < IMGS.length; s++) totalImgs += Object.keys(IMGS[s] || {}).length;
+
+  document.getElementById('gen-summary').innerHTML =
+    '<div style="display:flex;gap:14px;flex-wrap:wrap;">' +
+    '<span>📊 <strong style="color:#fff;">' + CSV.rows.length + '</strong> <span style="color:#555;">produtos</span></span>' +
+    '<span>🔗 <strong style="color:#fff;">' + mapped + '</strong> <span style="color:#555;">campos de texto</span></span>' +
+    '<span>🖼️ <strong style="color:#fff;">' + imgSlots + '</strong> <span style="color:#555;">slot(s) de imagem</span></span>' +
+    (totalImgs ? '<span>✅ <strong style="color:#fff;">' + totalImgs + '</strong> <span style="color:#555;">imagens carregadas</span></span>' : '') +
+    '</div>';
+}
+
+function updateGridInfo() {
+  var c = parseInt(document.getElementById('g-cols').value) || 5;
+  var n = CSV.rows.length;
+  var r = Math.ceil(n / c);
+  document.getElementById('grid-info').textContent =
+    n + ' produtos → ' + c + ' por linha → ' + r + ' linha' + (r !== 1 ? 's' : '');
+}
+
+function updateDelWarn() {
+  var del  = document.getElementById('del-tpl').checked;
+  var hide = document.getElementById('hide-tpl');
+  document.getElementById('del-warn').style.display = del ? 'block' : 'none';
+  // Se excluir está marcado, ocultar é redundante — desabilitar visualmente
+  hide.disabled = del;
+  document.getElementById('lbl-hide').style.opacity = del ? '0.4' : '1';
+}
+
+// ── Steppers do Passo 5 ────────────────────────────────────────────
+// Um único helper serve os 3 campos (Por linha, Espaço X, Espaço Y).
+// Botões fazem ajuste pelo passo; a caixa aceita digitação direta.
+
+// stepField — ajusta o input pelo passo, respeita o mínimo, atualiza o resumo.
+function stepField(id, delta, min, step) {
+  var inp = document.getElementById(id);
+  var cur = parseInt(inp.value, 10);
+  if (isNaN(cur)) { cur = min; }
+  var v = cur + delta * step;
+  if (v < min) { v = min; }
+  inp.value = v;
+  updateGridInfo();
+}
+
+// clampField — sanitiza o valor quando o usuário digita direto e sai do campo
+// (evita ficar negativo, vazio ou abaixo do mínimo permitido).
+function clampField(id, min) {
+  var inp = document.getElementById(id);
+  var v = parseInt(inp.value, 10);
+  if (isNaN(v) || v < min) { v = min; }
+  inp.value = v;
+  updateGridInfo();
+}
+
+// Por linha — mínimo 1, passo 1
+document.getElementById('btn-cols-minus').onclick = function() { stepField('g-cols', -1, 1, 1); };
+document.getElementById('btn-cols-plus').onclick  = function() { stepField('g-cols',  1, 1, 1); };
+document.getElementById('g-cols').oninput  = updateGridInfo;
+document.getElementById('g-cols').onchange = function() { clampField('g-cols', 1); };
+
+// Espaço X — mínimo 0, passo 5
+document.getElementById('btn-cg-minus').onclick = function() { stepField('g-cg', -1, 0, 5); };
+document.getElementById('btn-cg-plus').onclick  = function() { stepField('g-cg',  1, 0, 5); };
+document.getElementById('g-cg').oninput  = updateGridInfo;
+document.getElementById('g-cg').onchange = function() { clampField('g-cg', 0); };
+
+// Espaço Y — mínimo 0, passo 5
+document.getElementById('btn-rg-minus').onclick = function() { stepField('g-rg', -1, 0, 5); };
+document.getElementById('btn-rg-plus').onclick  = function() { stepField('g-rg',  1, 0, 5); };
+document.getElementById('g-rg').oninput  = updateGridInfo;
+document.getElementById('g-rg').onchange = function() { clampField('g-rg', 0); };
+
+// Checkbox: excluir template
+document.getElementById('del-tpl').onchange = function() {
+  this.dataset.touched = '1';
+  updateDelWarn();
+};
+document.getElementById('hide-tpl').onchange = function() {
+  this.dataset.touched = '1';
+};
+
+document.getElementById('btn-gen').onclick = function() {
+  if (!TPL)             { alert('Volte ao Passo 2 e selecione o template.'); return; }
+  if (!CSV.rows.length) { alert('Volte ao Passo 1 e carregue o CSV.'); return; }
+
+  // Converter cada slot: ArrayBuffer → array de inteiros (sem compressão, sem canvas)
+  var imgsFlat = IMAPS.map(function(_, s) {
+    var slot = {};
+    var src  = IMGS[s] || {};
+    for (var k in src) {
+      slot[k] = Array.from(new Uint8Array(src[k]));
+    }
+    return slot;
+  });
+
+  var cols = parseInt(document.getElementById('g-cols').value) || 5;
+  var cg   = parseInt(document.getElementById('g-cg').value)   || 0;
+  var rg   = parseInt(document.getElementById('g-rg').value)   || 0;
+
+  document.getElementById('btn-gen').disabled = true;
+  document.getElementById('btn-gen').textContent = '⏳ Gerando...';
+  document.getElementById('gen-prog').style.display = 'block';
+  document.getElementById('gen-done').style.display = 'none';
+  document.getElementById('gen-err').style.display  = 'none';
+
+  parent.postMessage({ pluginMessage: {
+    type: 'generate',
+    templateId: TPL.id,
+    rows: CSV.rows,
+    textMappings: TMAPS.filter(function(m) { return m.col && m.layer; }),
+    imageMappings: IMAPS.map(function(m) {
+      return { col: m.col, layer: m.layer, scaleMode: m.scale || 'FIT' };
+    }),
+    images: imgsFlat,
+    grid: { cols: cols, cGap: cg, rGap: rg, ox: TPL.x + TPL.w + 60, oy: TPL.y },
+    hideTemplate:   document.getElementById('hide-tpl').checked && !document.getElementById('del-tpl').checked,
+    deleteTemplate: document.getElementById('del-tpl').checked
+  }}, '*');
+};
+
+function resetGen() {
+  document.getElementById('gen-done').style.display = 'none';
+  document.getElementById('gen-prog').style.display = 'none';
+  document.getElementById('btn-gen').disabled = false;
+  document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  MENSAGENS DO FIGMA
+// ══════════════════════════════════════════════════════════════════
+window.onmessage = function(e) {
+  var msg = e.data.pluginMessage; if (!msg) return;
+
+  if (msg.type === 'sel') {
+    if (!msg.ok) {
+      document.getElementById('p2-err').textContent = '⚠️ ' + msg.err;
+      document.getElementById('p2-err').style.display = 'block';
+      document.getElementById('p2-ok').style.display  = 'none';
+      document.getElementById('p2-auto-hint').style.display = 'none';
+      TPL = null;
+    } else {
+      var autoDetected = TEMPLATE_NAMES.indexOf(normName(msg.data.name)) !== -1;
+      renderTpl(msg.data, autoDetected);
+    }
+  }
+
+  if (msg.type === 'prog') {
+    var pct = Math.round(msg.i / msg.n * 100);
+    document.getElementById('prog-txt').textContent = msg.i + ' / ' + msg.n;
+    document.getElementById('prog-bar').style.width = pct + '%';
+  }
+
+  if (msg.type === 'done') {
+    document.getElementById('gen-prog').style.display = 'none';
+    document.getElementById('done-n').textContent = msg.count;
+    document.getElementById('gen-done').style.display = 'block';
+    document.getElementById('btn-gen').disabled = false;
+    document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+  }
+
+  if (msg.type === 'err') {
+    document.getElementById('gen-prog').style.display = 'none';
+    document.getElementById('gen-err').textContent = '❌ ' + msg.msg;
+    document.getElementById('gen-err').style.display = 'block';
+    document.getElementById('btn-gen').disabled = false;
+    document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+  }
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  UTILITÁRIO
+// ══════════════════════════════════════════════════════════════════
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
