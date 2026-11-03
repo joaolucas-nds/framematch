@@ -2,6 +2,10 @@
 
 figma.showUI(__html__, { width: 520, height: 700 });
 
+// Distância entre o template e o 1º frame quando o template NÃO é excluído (DEC-010).
+// O ui.html tem um espelho desta constante só para o texto do Passo 5 — mantenha os dois iguais.
+var GRID_GAP_RIGHT = 60;
+
 function findLayerByName(node, name) {
   var target = norm(name);
   if (norm(node.name) === target) return node;
@@ -83,8 +87,13 @@ async function runGenerate(msg) {
     var cols = msg.grid.cols || 5;
     var cGap = msg.grid.cGap || 0;
     var rGap = msg.grid.rGap || 0;
-    var ox = msg.grid.ox || 0;
-    var oy = msg.grid.oy || 0;
+    // Origem do grid calculada com o template VIVO, na hora de gerar (não a posição lida no Passo 2).
+    // Excluir template → o catálogo nasce no lugar dele; senão, à direita, a GRID_GAP_RIGHT px.
+    // offX/offY = ajuste do usuário no Passo 5, padrão 0 (DEC-010).
+    var offX = msg.grid.offX || 0;
+    var offY = msg.grid.offY || 0;
+    var ox = (msg.deleteTemplate ? tpl.x : tpl.x + W + GRID_GAP_RIGHT) + offX;
+    var oy = tpl.y + offY;
     var clones = [];
 
     // msg.images é um array paralelo a msg.imageMappings:

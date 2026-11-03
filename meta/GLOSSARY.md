@@ -27,6 +27,7 @@
 - **thread principal** — contexto onde `code.js` roda; tem acesso à API do Figma mas não ao DOM.
 - **iframe / UI thread** — contexto onde `ui.html` roda; tem acesso ao DOM e às APIs do browser mas não ao Figma.
 - **postMessage** — único canal de comunicação entre os dois threads. Serializa tudo como JSON.
+- **ponto de partida** — onde nasce o 1º frame do catálogo: à direita do template (+`GRID_GAP_RIGHT`) ou, com «Excluir template» marcado, no lugar dele. O **Offset X/Y** do Passo 5 é somado a esse ponto (DEC-010).
 - **num-stepper** — componente de UI do Passo 5 (DEC-006): `[−] [caixa editável] [+]`. Botões para ajuste fino; caixa para digitação direta de valores grandes.
 
 ## Comandos / artefatos
@@ -42,3 +43,4 @@
 - **`TEMPLATE_NAMES`** — lista de nomes de frame (em minúsculas) que ativam auto-detecção no Passo 2. Altere só aqui.
 - **`DEFAULT_HIDE_TEMPLATE`** / **`DEFAULT_DELETE_TEMPLATE`** — constantes que definem o padrão dos checkboxes no Passo 5. Altere só aqui.
 - **`framematch-plugin-v1`** — `id` do plugin no `manifest.json` (DEC-007).
+- **`GRID_GAP_RIGHT`** — distância (60 px) entre o template e o 1º frame quando o template NÃO é excluído. Constante no `code.js` com espelho no `ui.html` (só para o texto do Passo 5) — os dois têm de ser iguais (DEC-010).

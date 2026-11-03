@@ -33,7 +33,7 @@
 **Critério de conclusão:** plugin renomeado e testado no Figma; os 3 campos de grade ajustáveis por botão e por digitação direta.
 - 🟢 Rename CatalogFiller → **FrameMatch** (DEC-007) — *lançado na 0.4.0 (2026-11-03).*
 - 🟢 **Stepper editável** nos 3 campos do Passo 5 (DEC-006) — *lançado na 0.4.0 (2026-11-03).*
-- [ ] **Offset X/Y do grid** configurável no Passo 5 (onde os frames aparecem no canvas).
+- 🟢 **Offset X/Y do grid** + catálogo no lugar do template ao excluir (DEC-010) — *implementado, aguardando teste.*
 - [ ] **Detecção de re-geração** — avisar se já existem clones do template antes de gerar.
 
 ## 🔵 F5 — Persistência de configuração *(futuro)*

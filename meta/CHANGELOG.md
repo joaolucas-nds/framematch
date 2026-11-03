@@ -7,7 +7,14 @@
 
 ## [Não lançado]
 
-_(nada ainda)_
+> Implementado em 2026-11-03, **aguardando teste no Figma**. Vira **0.5.0** após validação.
+
+### Adicionado
+- **Offset X/Y no Passo 5** (DEC-010): dois steppers (passo 10, aceitam negativos) que deslocam o catálogo a partir do ponto de partida; padrão 0/0.
+- **Catálogo no lugar do template:** com «Excluir template após gerar» marcado, o 1º frame nasce na posição do template, sem deixar buraco. Uma linha no Passo 5 diz o ponto de partida.
+
+### Corrigido
+- A origem do grid usava a posição do template lida no Passo 2; agora usa a posição na hora de gerar (template movido depois da seleção).
 
 ---
 

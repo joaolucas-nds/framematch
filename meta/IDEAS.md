@@ -18,7 +18,7 @@ Ferramenta separada (Python + Pillow) que:
 - **Saída sempre em PNG/JPG, NUNCA WebP** — o Figma rejeita WebP no `figma.createImage` (ver Descartadas). Para fotos sem transparência, JPG; para imagens com alpha, PNG otimizado (redução de paleta tipo *pngquant*) preserva a transparência e ainda encolhe bastante.
 
 ### 2026-07-17 — Ao excluir o template, gerar o catálogo na posição dele
-Hoje o grid nasce sempre à **direita** do template (`ox = TPL.x + TPL.w + 60`), independente de excluir ou não. Quando "Excluir template após gerar" está marcado, sobra um **buraco** onde o template estava e o catálogo fica deslocado. Ideia: se `deleteTemplate` estiver marcado, gerar o grid **começando na posição original do template** (`ox = TPL.x`, `oy = TPL.y`), ocupando o espaço dele. Mudança pequena e condicional no payload de grade; pareia naturalmente com a ideia de offset X/Y (F4). **Status:** não implementada; não estava registrada até agora (relacionada, mas distinta, da ideia de "offset X/Y configurável").
+Hoje o grid nasce sempre à **direita** do template (`ox = TPL.x + TPL.w + 60`), independente de excluir ou não. Quando "Excluir template após gerar" está marcado, sobra um **buraco** onde o template estava e o catálogo fica deslocado. Ideia: se `deleteTemplate` estiver marcado, gerar o grid **começando na posição original do template** (`ox = TPL.x`, `oy = TPL.y`), ocupando o espaço dele. Mudança pequena e condicional no payload de grade; pareia naturalmente com a ideia de offset X/Y (F4). **Status:** implementada na WO 0003, aguardando teste (DEC-010, spec `meta/specs/261103-offset-e-posicao-do-grid.md`).
 
 ### 2026-05 — Exportar mapeamento atual (JSON)
 Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de imagem, grade) como JSON para reutilizar em sessões futuras sem refazer do zero. Especialmente útil quando o mesmo template é usado repetidamente. (Complementa a persistência via `clientStorage`, abaixo — o JSON serve para portar entre máquinas/templates diferentes.)
@@ -27,11 +27,14 @@ Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de
 
 ## 🤖 Ideias Ativas — Assistente
 
+### 2026-11-03 — Avisar quando a exclusão do template falhar
+O `code.js` faz `try { tpl.remove(); } catch(e) {}`: se a exclusão falhar (template travado, por exemplo), ninguém fica sabendo — e no modo «no lugar do template» (DEC-010) ele fica escondido debaixo do 1º frame. Ideia: mandar um `warn` na mensagem `done` e mostrar no Passo 5. Pequena; sem pressa até alguém tropeçar.
+
 ### 2026-06-15 — Persistência automática via `figma.clientStorage` (recomendada)
 Lembrar automaticamente o último mapeamento, a configuração de grade e os checkboxes entre sessões, sem o usuário precisar exportar/importar nada. É o padrão dos bons plugins de dados do Figma e ataca a dor real de refazer o Passo 3 a cada uso. Mais simples para o caso comum que o "exportar JSON" (que continua útil para portar entre máquinas). Bom momento para implementar agora que o `id` do plugin foi fixado (DEC-007). → ROADMAP F5.
 
 ### 2026-05-30 — Offset X/Y configurável no Passo 5
-Atualmente os frames gerados aparecem sempre à direita do template (`ox = TPL.x + TPL.w + 60`). Expor `ox` e `oy` como campos editáveis no Passo 5 daria controle sobre onde o grid aparece no canvas — útil quando o template fica em um canto específico da página. Encaixa bem agora que o Passo 5 ganhou o componente de stepper (DEC-006).
+Atualmente os frames gerados aparecem sempre à direita do template (`ox = TPL.x + TPL.w + 60`). Expor `ox` e `oy` como campos editáveis no Passo 5 daria controle sobre onde o grid aparece no canvas — útil quando o template fica em um canto específico da página. Encaixa bem agora que o Passo 5 ganhou o componente de stepper (DEC-006). **Status:** implementada na WO 0003 como ajuste somado ao ponto de partida, aguardando teste (DEC-010).
 
 ### 2026-05-30 — Detecção de re-geração (frames duplicados)
 Antes de gerar, verificar se já existem clones do template no canvas para evitar sobreposição acidental. Poderia ser um aviso com opção de prosseguir ou cancelar.

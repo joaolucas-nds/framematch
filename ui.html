@@ -262,7 +262,27 @@ select option { background: #1e1e1e; }
         </div>
       </div>
     </div>
+    <!-- Offset X/Y — ajuste somado ao ponto de partida do grid (DEC-010); aceita negativos -->
+    <div class="g-p5" style="margin-top:10px;">
+      <div class="field-col">
+        <label>Offset X (px)</label>
+        <div class="num-stepper">
+          <button class="btn-adj" id="btn-ox-minus" type="button">−</button>
+          <input type="number" id="g-ox" value="0" step="10">
+          <button class="btn-adj" id="btn-ox-plus" type="button">+</button>
+        </div>
+      </div>
+      <div class="field-col">
+        <label>Offset Y (px)</label>
+        <div class="num-stepper">
+          <button class="btn-adj" id="btn-oy-minus" type="button">−</button>
+          <input type="number" id="g-oy" value="0" step="10">
+          <button class="btn-adj" id="btn-oy-plus" type="button">+</button>
+        </div>
+      </div>
+    </div>
     <div id="grid-info" style="margin-top:8px;color:#555;font-size:11px;"></div>
+    <div id="grid-origin" style="margin-top:3px;color:#555;font-size:11px;"></div>
   </div>
 
   <!-- Opções de template -->
@@ -340,6 +360,10 @@ var SIZE_LIMIT_BYTES = SIZE_LIMIT_MB * 1024 * 1024;
 // true = marcado por padrão, false = desmarcado.
 var DEFAULT_HIDE_TEMPLATE   = false;  // ← mude aqui: Ocultar template
 var DEFAULT_DELETE_TEMPLATE = true;   // ← mude aqui: Excluir template
+
+// Espelho do GRID_GAP_RIGHT do code.js — usado só no texto do ponto de partida (DEC-010).
+// Se mudar lá, mude aqui.
+var GRID_GAP_RIGHT = 60;
 
 // ══════════════════════════════════════════════════════════════════
 //  ESTADO GLOBAL
@@ -851,6 +875,10 @@ function updateDelWarn() {
   // Se excluir está marcado, ocultar é redundante — desabilitar visualmente
   hide.disabled = del;
   document.getElementById('lbl-hide').style.opacity = del ? '0.4' : '1';
+  // Ponto de partida do grid segue o "Excluir template" — mesmo critério do code.js (DEC-010)
+  document.getElementById('grid-origin').textContent = del
+    ? 'Ponto de partida: no lugar do template (ele será excluído)'
+    : 'Ponto de partida: à direita do template (+' + GRID_GAP_RIGHT + ' px)';
 }
 
 // ── Steppers do Passo 5 ────────────────────────────────────────────
@@ -858,10 +886,11 @@ function updateDelWarn() {
 // Botões fazem ajuste pelo passo; a caixa aceita digitação direta.
 
 // stepField — ajusta o input pelo passo, respeita o mínimo, atualiza o resumo.
-function stepField(id, delta, min, step) {
+// fallback (opcional): valor de partida quando a caixa está vazia; sem ele, usa o mínimo.
+function stepField(id, delta, min, step, fallback) {
   var inp = document.getElementById(id);
   var cur = parseInt(inp.value, 10);
-  if (isNaN(cur)) { cur = min; }
+  if (isNaN(cur)) { cur = (fallback !== undefined) ? fallback : min; }
   var v = cur + delta * step;
   if (v < min) { v = min; }
   inp.value = v;
@@ -870,10 +899,13 @@ function stepField(id, delta, min, step) {
 
 // clampField — sanitiza o valor quando o usuário digita direto e sai do campo
 // (evita ficar negativo, vazio ou abaixo do mínimo permitido).
-function clampField(id, min) {
+// fallback (opcional): valor quando a caixa está vazia/não numérica; sem ele, usa o mínimo.
+// Os offsets precisam disso: vazio vira 0, não o mínimo de -100000 (DEC-010).
+function clampField(id, min, fallback) {
   var inp = document.getElementById(id);
   var v = parseInt(inp.value, 10);
-  if (isNaN(v) || v < min) { v = min; }
+  if (isNaN(v)) { v = (fallback !== undefined) ? fallback : min; }
+  if (v < min) { v = min; }
   inp.value = v;
   updateGridInfo();
 }
@@ -895,6 +927,15 @@ document.getElementById('btn-rg-minus').onclick = function() { stepField('g-rg',
 document.getElementById('btn-rg-plus').onclick  = function() { stepField('g-rg',  1, 0, 5); };
 document.getElementById('g-rg').oninput  = updateGridInfo;
 document.getElementById('g-rg').onchange = function() { clampField('g-rg', 0); };
+
+// Offset X/Y — passo 10, aceita negativos; vazio vira 0 (DEC-010)
+var OFFSET_MIN = -100000;
+document.getElementById('btn-ox-minus').onclick = function() { stepField('g-ox', -1, OFFSET_MIN, 10, 0); };
+document.getElementById('btn-ox-plus').onclick  = function() { stepField('g-ox',  1, OFFSET_MIN, 10, 0); };
+document.getElementById('g-ox').onchange = function() { clampField('g-ox', OFFSET_MIN, 0); };
+document.getElementById('btn-oy-minus').onclick = function() { stepField('g-oy', -1, OFFSET_MIN, 10, 0); };
+document.getElementById('btn-oy-plus').onclick  = function() { stepField('g-oy',  1, OFFSET_MIN, 10, 0); };
+document.getElementById('g-oy').onchange = function() { clampField('g-oy', OFFSET_MIN, 0); };
 
 // Checkbox: excluir template
 document.getElementById('del-tpl').onchange = function() {
@@ -922,6 +963,8 @@ document.getElementById('btn-gen').onclick = function() {
   var cols = parseInt(document.getElementById('g-cols').value) || 5;
   var cg   = parseInt(document.getElementById('g-cg').value)   || 0;
   var rg   = parseInt(document.getElementById('g-rg').value)   || 0;
+  var offX = parseInt(document.getElementById('g-ox').value, 10) || 0;
+  var offY = parseInt(document.getElementById('g-oy').value, 10) || 0;
 
   document.getElementById('btn-gen').disabled = true;
   document.getElementById('btn-gen').textContent = '⏳ Gerando...';
@@ -938,7 +981,8 @@ document.getElementById('btn-gen').onclick = function() {
       return { col: m.col, layer: m.layer, scaleMode: m.scale || 'FIT' };
     }),
     images: imgsFlat,
-    grid: { cols: cols, cGap: cg, rGap: rg, ox: TPL.x + TPL.w + 60, oy: TPL.y },
+    // A origem (ox/oy) é calculada no code.js com o template vivo; aqui vai só o ajuste (DEC-010)
+    grid: { cols: cols, cGap: cg, rGap: rg, offX: offX, offY: offY },
     hideTemplate:   document.getElementById('hide-tpl').checked && !document.getElementById('del-tpl').checked,
     deleteTemplate: document.getElementById('del-tpl').checked
   }}, '*');

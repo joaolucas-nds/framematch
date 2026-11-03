@@ -183,6 +183,30 @@ Duas raias. **Chat (planejamento):** escreve inteiros CEREBRO, CONTEXT, GLOSSARY
 - Fechadas as pendências da DEC-008: `HISTORICO.md` → `HISTORY.md`; Arquivos Críticos migraram do STATUS para o CONTEXT.
 
 ---
+
+## DEC-010 — Ponto de partida do grid: segue o «Excluir template», com Offset X/Y como ajuste
+**Data:** 2026-11-03 · **Status:** aceita
+
+### Contexto
+O grid nascia sempre 60 px à direita do template, com a posição lida no Passo 2. Com «Excluir template» marcado (padrão) sobrava um buraco no lugar do template, e não havia como escolher onde o catálogo nasce. Spec: `meta/specs/261103-offset-e-posicao-do-grid.md` (aprovada pelo dono).
+
+### Decisão
+- O **ponto de partida** segue o checkbox «Excluir template»: marcado → no lugar do template; desmarcado → à direita, a `GRID_GAP_RIGHT` (60 px). «Ocultar template» não muda o ponto de partida.
+- **Offset X/Y** no Passo 5 é um AJUSTE somado ao ponto de partida, padrão 0/0, aceita negativos.
+- A origem é calculada no `code.js` com o template **vivo** (`tpl.x`, `tpl.y`, `tpl.width`) na hora de gerar; o `ui.html` manda só `offX`/`offY`.
+
+### Alternativas consideradas
+- **Coordenada absoluta do canvas** — obrigaria a ler X/Y no Figma e digitar; padrão dependeria do template.
+- **Offset padrão 60 como distância do template** — teria de virar 0 ao marcar «Excluir»: estado escondido.
+- **Seletor «Posição do catálogo»** — controle a mais para o que o checkbox já decide.
+
+### Consequências
+- Offset 0/0 reproduz o comportamento da 0.4.0 quando «Excluir» está desmarcado.
+- Corrige o defeito latente da posição velha (template movido depois do Passo 2).
+- `GRID_GAP_RIGHT` existe nos dois lados (o `ui.html` só para o texto); divergir quebra só o texto, não a geração.
+- `stepField`/`clampField` ganharam parâmetro opcional `fallback` (vazio → 0 nos offsets); os 3 campos antigos não mudam.
+
+---
 ## FIX-001 — Bug de espaços duplos: normName colapsava espaços, norm() do code.js não
 **Data:** 2026-05-30 · **Status:** resolvida
 

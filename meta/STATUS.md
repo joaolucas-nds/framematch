@@ -25,7 +25,7 @@
 
 ## 🔧 Em Progresso
 
-- Nada em progresso. Próxima frente no Backlog.
+- **0.5.0 — implementada, aguardando teste no Figma:** Offset X/Y no Passo 5 + catálogo no lugar do template ao excluir + origem calculada com o template vivo (spec `meta/specs/261103-offset-e-posicao-do-grid.md`, DEC-010).
 
 ## ❌ Quebrado / Com Problema
 
@@ -33,9 +33,12 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Retomar o desenvolvimento:** Offset X/Y no Passo 5 + posição do template ao excluir (F4), depois `clientStorage` (F5).
+- [ ] **Testar a 0.5.0 no Figma Desktop** — roteiro do chat a partir dos critérios de aceite da spec.
+- [ ] Depois: detecção de re-geração (resto da F4) ou `clientStorage` (F5).
 
 ## 💬 Última conversa
+
+**2026-11-03 (noite)** — F4: spec do Offset X/Y + catálogo no lugar do template aprovada (`meta/specs/`, primeira spec do projeto) e implementada pela WO 0003 (DEC-010). Aguarda o roteiro de teste no Figma para virar 0.5.0.
 
 **2026-11-03 (tarde)** — **0.4.0 lançada:** roteiro de 12 itens no Figma Desktop, todos ok (nome, Passo 5, geração com os valores, espaços duplos, múltiplos slots, PNG transparente). Criado `.gitattributes` (`*.sh text eol=lf`) para o `check.sh` não quebrar com CRLF (CONTEXT, armadilha #8). Instruções do Projeto já coladas no painel. Próximo passo: F4 — Offset X/Y + posição do template ao excluir.
 
