@@ -1,6 +1,6 @@
 # GLOSSARY.md — Termos do Projeto
 
-> **Opcional.** Vocabulário específico do FrameMatch que se repete entre sessões.
+> **Opcional.** Vocabulário específico do FrameMatch que se repete entre conversas.
 > Mantenha curto: só o que não é óbvio para alguém de fora.
 
 ---
@@ -32,6 +32,9 @@
 ## Comandos / artefatos
 
 - **`code.js` / `ui.html` / `manifest.json`** — os três arquivos do plugin; ver CONTEXT (Estrutura).
+- **`scripts/check.sh`** — validação de sintaxe ES5 antes do commit. Não testa comportamento.
+- **WO (work order)** — instrução de aplicação em `meta/workorders/AAMMDD-woNNNN-desc.md`: âncora + texto exato, que o chat escreve e o Claude Code aplica com `/apply-wo` (DEC-009).
+- **`/apply-wo` · `/wrap` · `/sondar`** — skills do Claude Code em `.claude/skills/`: aplicar WO, fechar tarefa, exploração sem hipótese.
 
 ## Identificadores
 

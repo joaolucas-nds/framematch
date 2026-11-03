@@ -1,6 +1,6 @@
 # CONTEXT.md — FrameMatch
 
-> Arquivo **estável**. O assistente lê no início de cada sessão para se ambientar.
+> Arquivo **estável**. O assistente lê ao abrir cada conversa para se ambientar.
 > Muda pouco: só em alteração estrutural (stack, arquitetura, escopo, nova armadilha descoberta).
 > Mantenha enxuto — descreve o que o projeto É, não o que está acontecendo agora (isso é o STATUS).
 
@@ -16,19 +16,25 @@ FrameMatch é um plugin para Figma que preenche frames de catálogo de produtos 
 - **Front-end / UI:** HTML + CSS inline, sem frameworks ou bundlers.
 - **API:** Figma Plugin API 1.0.0 (`figma.showUI`, `figma.ui.onmessage`, `figma.getNodeById`, `figma.createImage`).
 - **Persistência:** nenhuma — toda a configuração vive em memória durante a execução.
-- **Testes:** nenhum automatizado — validação manual no Figma Desktop (Windows).
+- **Testes:** sem suíte. `bash scripts/check.sh` confere só a **sintaxe** (guarda ES5 + `node --check` de `code.js` e do `<script>` do `ui.html`); o **comportamento** só se valida manualmente no Figma Desktop (Windows).
 - **Deploy:** arquivos locais, carregados pelo Figma Desktop via `manifest.json`.
 
 ## Estrutura do Projeto
 
 ```
 framematch/
-├── code.js       # thread principal do Figma — acessa a API (figma.*); preenche frames
-├── ui.html       # interface do plugin (iframe isolado) — toda a lógica de matching e UI
-└── manifest.json # metadados: nome, id, entrypoints
+├── code.js                   # thread principal do Figma — acessa a API (figma.*); preenche frames
+├── ui.html                   # interface do plugin (iframe isolado) — toda a lógica de matching e UI
+├── manifest.json             # metadados: nome, id, entrypoints
+├── scripts/check.sh          # validação de sintaxe (ES5 + node --check) — ver Testes
+├── CLAUDE.md                 # guia do Claude Code (raiz, lido em todo turno)
+├── INSTRUCOES-DO-PROJETO.md  # fonte das Instruções do Projeto (cópia colada no painel do claude.ai)
+├── .claude/                  # settings.json + skills /apply-wo, /wrap, /sondar
+├── meta/                     # documentos de contexto; meta/workorders/ = WOs (DEC-009)
+└── logs/                     # log do dia (AAAA-MM-DD.md)
 ```
 
-Não há build step, dependências npm, nem testes automatizados.
+Não há build step nem dependências npm. O plugin em si continua sendo só os três primeiros arquivos.
 
 ## Convenções de Código
 
@@ -89,13 +95,21 @@ Fluxo do matching para uma imagem:
 > A parte mais valiosa do arquivo. Cada armadilha já custou tempo uma vez.
 > Formato: o que parece certo → por que está errado → o que fazer em vez disso.
 
-1. **Sintaxe moderna no código** (`??`, `?.`, `const`, arrow function, template literal) — causa erro silencioso ou crash na inicialização; o Figma não reporta claramente. → Sempre ES5; testar no Figma Desktop após editar `code.js`.
+1. **Sintaxe moderna no código** (`??`, `?.`, `const`, arrow function, template literal) — causa erro silencioso ou crash na inicialização; o Figma não reporta claramente. → Sempre ES5; rodar `bash scripts/check.sh` e testar no Figma Desktop após editar `code.js` ou `ui.html`.
 2. **Canvas/compressão para pré-processar imagem** — `canvas.toBlob(..., 'image/jpeg')` converte o canal alpha para preto. → Nunca usar canvas; enviar bytes crus via `ArrayBuffer`. Ver DEC-002/FIX-002.
 3. **`normName` ≠ `norm`** — se `normName` colapsar espaços múltiplos e `norm` não, produtos com dois espaços no CSV nunca encontram a imagem. → As duas funções devem ser idênticas. Ver FIX-001.
 4. **Base64 no sandbox** — `code.js` não tem `atob`; imagem como Base64 vira lixo. → Sempre array de inteiros. Ver DEC-004/FIX-003.
-5. **Payload grande no `postMessage`** — imagem acima de ~4MB como array de inteiros explode o JSON (cada byte vira ~1–3 chars) e trava o runtime WASM. → Limitar por `SIZE_LIMIT_MB` e alertar. Ver DEC-003 e HISTORICO §2.
+5. **Payload grande no `postMessage`** — imagem acima de ~4MB como array de inteiros explode o JSON (cada byte vira ~1–3 chars) e trava o runtime WASM. → Limitar por `SIZE_LIMIT_MB` e alertar. Ver DEC-003 e HISTORY §2.
 6. **`getNodeByIdAsync`** — na API 1.0.0 `figma.getNodeById` é síncrono; não usar a versão async. Ver DEC-001.
-7. **WebP enviado ao `figma.createImage`** — o Figma aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Converter WebP→PNG via canvas cairia na corrupção de transparência da armadilha #2. → Usar PNG/JPG; para reduzir tamanho mantendo alpha, comprimir offline em PNG. Detalhe em HISTORICO §4 / DEC nenhum (constraint externo, registrado no IDEAS como descartado).
+7. **WebP enviado ao `figma.createImage`** — o Figma aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Converter WebP→PNG via canvas cairia na corrupção de transparência da armadilha #2. → Usar PNG/JPG; para reduzir tamanho mantendo alpha, comprimir offline em PNG. Detalhe em HISTORY §4 / DEC nenhum (constraint externo, registrado no IDEAS como descartado).
+
+## 📁 Arquivos Críticos (não mexer sem contexto)
+
+> Conhecimento **estável**, não estado do agora — por isso vive aqui, e não no STATUS (movido de lá em 2026-11-03, merge do kit v1.133.0).
+
+- `code.js` — thread principal do Figma. Usa `norm()` (trim+lowercase, sem colapsar espaços). Qualquer mudança aqui exige verificar `normName()` no `ui.html` para manter paridade. Suporta `imageMappings` (array) e `deleteTemplate` — versões antigas do ui.html são incompatíveis.
+- `ui.html` — toda a lógica de matching e UI. As funções `normName` e `normForMatch` são o coração do sistema de imagens — leia DEC-003 e FIX-001 antes de tocar. O Passo 5 usa o helper `stepField`/`clampField` para os steppers (DEC-006).
+- `manifest.json` — o `id` (`framematch-plugin-v1`) não muda: o `clientStorage` está preso a ele (DEC-007).
 
 ## Contexto de Produto
 

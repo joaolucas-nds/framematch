@@ -144,7 +144,7 @@ Identidade do projeto unificada. **Atenção operacional:** como o `id` do manif
 ---
 
 ## DEC-008 — Modo de trabalho: ASU ativo, chat escolhe; Code+specs descartado
-**Data:** 2026-07-17 · **Status:** aceita
+**Data:** 2026-07-17 · **Status:** substituída por DEC-009
 
 ### Contexto
 Chegou o template-update do KCM v1.72.0 (assume modo Code, specs em `meta/specs/`, comandos como skills). Avaliamos três modos de manter os docs: (a) chat + arquivo inteiro, (b) Claude Code + specs, (c) ASU (ferramenta Python que aplica instruções YAML de delta).
@@ -163,8 +163,28 @@ Manter **modo ASU ativo**, com o chat **escolhendo caso a caso** entre entregar 
 - Break-even do ASU é apertado com docs pequenos (menos de ~10-15KB); por isso o chat escolhe, não aplica cegamente.
 
 ---
+
+## DEC-009 — Modo de trabalho: Claude Code + WO (substitui DEC-008)
+**Data:** 2026-11-03 · **Status:** aceita
+
+### Contexto
+Chegou o template-update do KCM v1.133.0, gerado com `Code sim · ASU nao`. Desde a DEC-008 mudou o canal: o chat agora roda com a pasta do projeto **vinculada** (app desktop), lendo e gravando direto no disco — o mount achatado do FlatDrop virou canal de reserva. O dono decidiu migrar de modo em 2026-11-03.
+
+### Decisão
+Duas raias. **Chat (planejamento):** escreve inteiros CEREBRO, CONTEXT, GLOSSARY, `INSTRUCOES-DO-PROJETO.md`, análises e WOs; git só leitura. **Claude Code (execução):** código, appends em STATUS/DECISIONS/CHANGELOG, log do dia; aplica WOs de `meta/workorders/` com `/apply-wo`; valida com `bash scripts/check.sh`; commita e empurra. IDEAS e documento grande e vivo mudam por WO. **ASU desligado** — `meta/ASU/` arquivado em `../zz_notas-arquivadas/261103-meta-ASU/`.
+
+### Alternativas consideradas
+- **Manter ASU (DEC-008)** — o custo que o ASU atacava (regenerar doc grande por uma linha) a WO resolve do mesmo jeito, com âncora conferida e `git diff` de quem aplica; e o kit deixou de gerar o modo para este projeto.
+- **Só chat + arquivo inteiro** — sem executor, ninguém roda a validação nem commita: o dono vira o executor manual.
+
+### Consequências
+- O argumento da DEC-008 contra o Code continua verdadeiro: **o Code não roda o plugin.** Mitigação: `scripts/check.sh` responde «a sintaxe é ES5?»; «funciona?» segue sendo roteiro manual do dono no Figma Desktop.
+- Arquivos novos: `CLAUDE.md`, `INSTRUCOES-DO-PROJETO.md` (fonte das Instruções; o painel do Projeto é cópia), `.claude/`, `scripts/check.sh`, `meta/workorders/`, `meta/SPEC.md`.
+- Fechadas as pendências da DEC-008: `HISTORICO.md` → `HISTORY.md`; Arquivos Críticos migraram do STATUS para o CONTEXT.
+
+---
 ## FIX-001 — Bug de espaços duplos: normName colapsava espaços, norm() do code.js não
-**Data:** 2026-05-30
+**Data:** 2026-05-30 · **Status:** resolvida
 
 - **Sintoma:** CSV com `ARM ACO  AMEIXA` (dois espaços) aparecia como "encontrado" nos chips verdes, mas a imagem não era inserida no frame.
 - **Causa raiz:** `normName` no `ui.html` aplicava `.replace(/\s+/g, ' ')` (colapsa múltiplos espaços em um). Então a chave salva em `IMGS` era `"arm aco ameixa"` (1 espaço). O `norm()` do `code.js` fazia só `trim + toLowerCase`, resultando em `"arm aco  ameixa"` (2 espaços). Chaves diferentes → `images[rawName]` retornava `null` → imagem ignorada silenciosamente.
@@ -174,7 +194,7 @@ Manter **modo ASU ativo**, com o chat **escolhendo caso a caso** entre entregar 
 ---
 
 ## FIX-002 — Canvas compression corrompeu PNG transparente
-**Data:** 2026-05-30
+**Data:** 2026-05-30 · **Status:** resolvida
 
 - **Sintoma:** Imagens de louças e cubas (PNG com fundo transparente) apareciam com fundo **preto** no Figma após geração.
 - **Causa raiz:** O `ui.html` usava `canvas.getContext('2d').drawImage` + `canvas.toBlob(..., 'image/jpeg', 0.85)` para comprimir imagens. O formato JPEG não suporta transparência — o canvas renderiza o canal alpha como preto.
@@ -184,7 +204,7 @@ Manter **modo ASU ativo**, com o chat **escolhendo caso a caso** entre entregar 
 ---
 
 ## FIX-003 — Base64 em v9: code.js não tem atob
-**Data:** 2026-05-30
+**Data:** 2026-05-30 · **Status:** resolvida
 
 - **Sintoma:** v9 encontrava as imagens (chips verdes), mas nenhuma era inserida no Figma.
 - **Causa raiz:** v9 enviava imagens como Base64 (`btoa(binary)`). `code.js` tentava `new Uint8Array(base64String)` — que cria um Uint8Array do tamanho do string, preenchido com os code points dos caracteres ASCII, não com os bytes da imagem.
@@ -194,7 +214,7 @@ Manter **modo ASU ativo**, com o chat **escolhendo caso a caso** entre entregar 
 ---
 
 ## FIX-004 — csvSet com duas chaves por produto causava chips duplicados
-**Data:** 2026-05-30
+**Data:** 2026-05-30 · **Status:** resolvida
 
 - **Sintoma:** Passo 4 mostrava cada produto duas vezes na lista de status (um chip verde e um vermelho para o mesmo produto).
 - **Causa raiz:** Uma versão intermediária do `buildCsvImageSet` registrava `set[normName(v)] = v` E `set[normForMatch(v)] = v` para cada produto. Como o `renderImgStatus` iterava sobre todas as chaves do dicionário, produtos com caracteres especiais apareciam duas vezes.

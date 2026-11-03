@@ -37,7 +37,13 @@ Atualmente os frames gerados aparecem sempre à direita do template (`ox = TPL.x
 Antes de gerar, verificar se já existem clones do template no canvas para evitar sobreposição acidental. Poderia ser um aviso com opção de prosseguir ou cancelar.
 
 ### 2026-05-30 — Envio de imagens por lote (chunk)
-Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por vez ou em grupos pequenos e gerar cada frame à medida que chega. Isso removeria o limitador de 4 MB e permitiria catálogos com imagens grandes. Mudança de arquitetura significativa — avaliar quando o limite for um problema real. → ROADMAP F6.
+Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por vez ou em grupos pequenos e gerar cada frame à medida que chega. Isso removeria o limitador de 4 MB e permitiria catálogos com imagens grandes. Mudança de arquitetura significativa — avaliar quando o limite for um problema real. → ROADMAP F7.
+
+---
+
+## 🛌 Adiadas
+> Decisão consciente de não fazer agora. Cada item com **o gatilho que a traz de volta**: ideia adiada sem gatilho é ideia perdida.
+- _(vazia)_
 
 ---
 
@@ -61,5 +67,15 @@ Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por v
 - **Compressão via canvas** — descartada porque `canvas.toBlob('image/jpeg')` destrói transparência de PNG. Ver FIX-002.
 - **Base64 para transferência de imagens** — descartada porque `code.js` não tem `atob` no sandbox do Figma. Ver FIX-003.
 - **Uma pasta por slot de imagem** — descartada em favor de uma pasta única (DEC-005): mais simples para o usuário, funciona bem porque arquivos de slots distintos têm nomes distintos.
-- **WebP para envio ao Figma** — descartada porque `figma.createImage` aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Os plugins que "importam WebP" convertem para PNG antes — o que cairia na corrupção de transparência do canvas (FIX-002) ou exigiria servidor externo. Para reduzir payload mantendo alpha, o caminho é PNG otimizado offline, não WebP. Ver CONTEXT armadilha #7 / HISTORICO §4.
+- **WebP para envio ao Figma** — descartada porque `figma.createImage` aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Os plugins que "importam WebP" convertem para PNG antes — o que cairia na corrupção de transparência do canvas (FIX-002) ou exigiria servidor externo. Para reduzir payload mantendo alpha, o caminho é PNG otimizado offline, não WebP. Ver CONTEXT armadilha #7 / HISTORY §4.
 - **Matching por nome de frame (modo índice, estilo CSV Data Merge)** — descartada porque concorre com o paradigma central de "clonar template". O caso prático que parecia exigir isso (vários frames de imagem por produto, ex: `frame 1`…`frame 4`) já é resolvido por **múltiplos slots de imagem** (DEC-005). Reabrir só se surgir o fluxo "preencher frames já diagramados à mão, sem clonar template".
+
+---
+
+## 📮 Feedback para o Kit
+> Observações e desvios estruturais sobre o próprio kit (KCM). É o que volta para evoluir o kit.
+
+- **[2026-11-03]** A regra de higiene do CEREBRO diz que «a ponte do chat também não grava em `.claude/`». **Medido aqui, falso:** com a pasta vinculada pelo app desktop, o chat criou `.claude/settings.json` e as três skills sem bloqueio. Sugestão: qualificar a regra pelo canal (pode valer para outra ponte) e manter como motivo a divisão de raias — permissão do executor não se autoconcede —, não a impossibilidade técnica.
+- **[2026-11-03]** A regra «Git pelo chat é só leitura» se justifica por «o chat não consegue apagar o `.git/index.lock`». **Medido aqui:** com a permissão de apagar concedida na conversa, o chat commitou (`f83a66d`) sem deixar `.lock`. A regra continua certa pela divisão de raias, mas a justificativa técnica não é absoluta — vale dizer que ela depende da permissão de apagar.
+- **[2026-11-03]** Contradição interna no kit: o modelo do `DECISIONS.md` manda arquivar «quando passar de ~700 linhas» e o bloco FIX não tem campo `Status`; o CEREBRO (higiene) manda arquivar por EVENTO e exige `**Status:**` em toda entrada. Aqui: Status acrescentado aos FIX (`resolvida`); arquivamento por evento **não** aplicado, porque os FIX são lições vivas citadas pelas armadilhas do CONTEXT.
+- **[2026-11-03]** O modelo do `IDEAS.md` traz a seção «Feedback para o ASU» mesmo num pacote gerado com `ASU nao` — é sobra do modo desligado. Não adotada aqui.

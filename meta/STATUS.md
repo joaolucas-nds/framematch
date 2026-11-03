@@ -1,7 +1,7 @@
 # STATUS.md — Estado Atual
 
 > Arquivo **rolante**: descreve só o AGORA. O assistente lê no início para saber onde retomar.
-> Item resolvido SAI daqui — vai para o CHANGELOG (se foi entrega) e/ou para o log da sessão.
+> Item resolvido SAI daqui — vai para o CHANGELOG (se foi entrega) e/ou para o log do dia.
 > Médio e longo prazo NÃO ficam aqui — ficam no ROADMAP.
 
 ---
@@ -39,16 +39,12 @@
 - [ ] Confirmar que o Figma reflete o novo nome **FrameMatch** após substituir os arquivos; se não, re-importar o `manifest.json` uma vez (o `id` mudou — ver DEC-007).
 - [ ] Testar 0.3.0/0.4.0 com um CSV real e pasta de imagens, confirmando o bug dos espaços duplos resolvido e múltiplos slots funcionando.
 - [ ] Confirmar que PNG com transparência chega sem fundo preto.
-- [ ] **Aplicar o merge do kit v1.72.0** (CEREBRO + INSTRUCOES): acrescentar as seções novas do CEREBRO (template-update, refino das instruções, recomendação de config), remover o apêndice velho de Claude Code, e somar as regras novas no INSTRUCOES — preservando todo o conteúdo específico do FrameMatch.
-- [ ] **Renomear `HISTORICO.md` → `HISTORY.md`** e ajustar referências cruzadas (CONTEXT armadilha #7, GLOSSARY).
 - [ ] **Retomar o desenvolvimento:** Offset X/Y no Passo 5 + posição do template ao excluir (F4), depois `clientStorage` (F5).
+- [ ] **Colar `INSTRUCOES-DO-PROJETO.md` no painel do Projeto do claude.ai** (o arquivo da raiz é a fonte; o painel é a cópia — DEC-009).
 
-## 📁 Arquivos Críticos (não mexer sem contexto)
+## 💬 Última conversa
 
-- `code.js` — thread principal do Figma. Usa `norm()` (trim+lowercase, sem colapsar espaços). Qualquer mudança aqui exige verificar `normName()` no `ui.html` para manter paridade. Suporta `imageMappings` (array) e `deleteTemplate` — versões antigas do ui.html são incompatíveis.
-- `ui.html` — toda a lógica de matching e UI. As funções `normName` e `normForMatch` são o coração do sistema de imagens — leia DEC-003 e FIX-001 antes de tocar. O Passo 5 usa o helper `stepField`/`clampField` para os steppers (DEC-006).
-
-## 💬 Última Sessão
+**2026-11-03** — Merge do template-update do KCM **v1.133.0** e migração do modo de trabalho para **Claude Code + WO** (DEC-009, substitui DEC-008). CEREBRO adotado do kit, com a seção «Técnicas específicas» do FrameMatch; criados na raiz `INSTRUCOES-DO-PROJETO.md` e `CLAUDE.md`; `.claude/` com `settings.json` e as skills `/apply-wo`, `/wrap`, `/sondar`; `scripts/check.sh` (guarda ES5 + `node --check`); `HISTORICO.md` → `HISTORY.md`; Arquivos Críticos movidos para o CONTEXT; `meta/ASU/` arquivado fora do repo. A 0.4.0 foi commitada (`f83a66d`) antes do merge. Próximo passo óbvio: testar a 0.4.0 no Figma Desktop (backlog acima).
 
 **2026-07-17** — Corrigido o layout do Passo 5: os 3 steppers voltaram a ficar **lado a lado** (compactos, sem gaps inúteis); a pilha vertical foi revertida (DEC-006 atualizado). Comparado o pacote **template-update do KCM v1.72.0** contra os docs vivos — reporte de novidades/choques entregue ao usuário, **nada aplicado** (ele decide os merges). Confirmado que `figma.clientStorage` = 5 MB, só no `code.js`, e some se o `id` mudar (rename foi na hora certa). Capturada a ideia "ao excluir template, gerar o grid na posição dele" (IDEAS). Pesquisa dos 5 plugins de referência reforça F5 (perfis de mapeamento) como a melhor melhoria a importar. Próximo passo: decidir os merges do kit e qual ideia de F4/F5 implementar primeiro.
 

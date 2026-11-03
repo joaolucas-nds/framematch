@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read", "Write", "Edit", "Grep", "Glob",
+      "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)",
+      "Bash(git mv:*)",
+      "Bash(bash scripts/check.sh:*)", "Bash(date:*)", "Bash(sha1sum:*)", "Bash(wc:*)", "Bash(grep:*)", "Bash(ls:*)"
+    ],
+    "deny": ["Bash(rm -rf:*)"],
+    "additionalDirectories": ["../"]
+  }
+}

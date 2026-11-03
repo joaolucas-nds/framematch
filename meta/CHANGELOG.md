@@ -11,7 +11,7 @@
 
 ### Modificado
 - **Renomeado o projeto de CatalogFiller para FrameMatch** (DEC-007): `manifest.json` (`name` e `id` → `framematch-plugin-v1`), cabeçalho de `code.js` e todos os documentos de contexto. O `id` do manifest mudou — pode exigir re-importar o manifest no Figma uma vez.
-- **Passo 5 — stepper editável unificado** (DEC-006): os 3 campos (Por linha, Espaço X, Espaço Y) agora usam o controle `[−] [caixa] [+]`. "Por linha" ganhou caixa de digitação (antes era só display); Espaço X/Y ganharam botões +/− (antes eram inputs crus). Layout do Passo 5 passou de grid de 3 colunas para pilha vertical (label à esquerda, stepper à direita), para caber melhor na janela estreita do plugin.
+- **Passo 5 — stepper editável unificado** (DEC-006): os 3 campos (Por linha, Espaço X, Espaço Y) agora usam o controle `[−] [caixa] [+]`. "Por linha" ganhou caixa de digitação (antes era só display); Espaço X/Y ganharam botões +/− (antes eram inputs crus). Layout do Passo 5 mantém os 3 campos lado a lado, compactos (uma pilha vertical foi tentada e revertida em 2026-07-17 — DEC-006).
 
 ### Adicionado
 - Helpers ES5 `stepField(id, delta, min, step)` e `clampField(id, min)` centralizando a lógica dos três steppers; setas nativas do `input[type=number]` ocultadas.

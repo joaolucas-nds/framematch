@@ -1,7 +1,7 @@
-# HISTORICO.md — Conhecimento Consolidado
+# HISTORY.md — Conhecimento Consolidado
 
 > **Opcional.** Arquivo-baú para conhecimento denso que já foi aprendido e não muda mais — guias técnicos, análises de viabilidade, notas de migração.
-> Não é lido no início da sessão; o assistente consulta sob demanda quando o assunto aparece.
+> Não é lido ao abrir a conversa; o assistente consulta sob demanda quando o assunto aparece.
 
 ---
 
