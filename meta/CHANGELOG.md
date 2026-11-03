@@ -7,7 +7,13 @@
 
 ## [Não lançado]
 
-> Implementado em 2026-11-03, **aguardando teste no Figma**. Vira **0.5.0** após validação.
+_(nada ainda)_
+
+---
+
+## [0.5.0] — 2026-11-03
+
+> Implementada e validada em 2026-11-03 no Figma Desktop (roteiro de 11 itens, todos ok: campos e aviso de ponto de partida, botões e caixa vazia, posições com e sem «Excluir», com offset, template movido depois do Passo 2, grade intacta).
 
 ### Adicionado
 - **Offset X/Y no Passo 5** (DEC-010): dois steppers (passo 10, aceitam negativos) que deslocam o catálogo a partir do ponto de partida; padrão 0/0.

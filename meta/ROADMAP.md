@@ -33,12 +33,12 @@
 **Critério de conclusão:** plugin renomeado e testado no Figma; os 3 campos de grade ajustáveis por botão e por digitação direta.
 - 🟢 Rename CatalogFiller → **FrameMatch** (DEC-007) — *lançado na 0.4.0 (2026-11-03).*
 - 🟢 **Stepper editável** nos 3 campos do Passo 5 (DEC-006) — *lançado na 0.4.0 (2026-11-03).*
-- 🟢 **Offset X/Y do grid** + catálogo no lugar do template ao excluir (DEC-010) — *implementado, aguardando teste.*
+- 🟢 **Offset X/Y do grid** + catálogo no lugar do template ao excluir (DEC-010) — *lançado na 0.5.0 (2026-11-03).*
 - [ ] **Detecção de re-geração** — avisar se já existem clones do template antes de gerar.
 
 ## 🔵 F5 — Persistência de configuração *(futuro)*
 **Objetivo:** eliminar a necessidade de refazer o mapeamento para templates recorrentes.
-- **Persistência automática via `figma.clientStorage`** — lembra último mapeamento, grade e checkboxes entre sessões (caso comum). Momento bom agora que o `id` do plugin foi fixado (DEC-007).
+- **Persistência automática via `figma.clientStorage`** — lembra último mapeamento, grade e checkboxes entre sessões (caso comum). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo, e o `clientStorage` fica preso a ele — fazer a F5 só com o `id` definitivo.
 - **Exportar/importar mapeamento como JSON** — para portar configuração entre máquinas ou templates diferentes; importar pré-preenche os slots no Passo 3.
 
 ## 🔵 F6 — Ferramenta Python de compressão em lote *(futuro)*

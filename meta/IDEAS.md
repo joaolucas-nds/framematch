@@ -17,9 +17,6 @@ Ferramenta separada (Python + Pillow) que:
 - Nunca renomeia — diferencia original de comprimido apenas por pasta
 - **Saída sempre em PNG/JPG, NUNCA WebP** — o Figma rejeita WebP no `figma.createImage` (ver Descartadas). Para fotos sem transparência, JPG; para imagens com alpha, PNG otimizado (redução de paleta tipo *pngquant*) preserva a transparência e ainda encolhe bastante.
 
-### 2026-07-17 — Ao excluir o template, gerar o catálogo na posição dele
-Hoje o grid nasce sempre à **direita** do template (`ox = TPL.x + TPL.w + 60`), independente de excluir ou não. Quando "Excluir template após gerar" está marcado, sobra um **buraco** onde o template estava e o catálogo fica deslocado. Ideia: se `deleteTemplate` estiver marcado, gerar o grid **começando na posição original do template** (`ox = TPL.x`, `oy = TPL.y`), ocupando o espaço dele. Mudança pequena e condicional no payload de grade; pareia naturalmente com a ideia de offset X/Y (F4). **Status:** implementada na WO 0003, aguardando teste (DEC-010, spec `meta/specs/261103-offset-e-posicao-do-grid.md`).
-
 ### 2026-05 — Exportar mapeamento atual (JSON)
 Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de imagem, grade) como JSON para reutilizar em sessões futuras sem refazer do zero. Especialmente útil quando o mesmo template é usado repetidamente. (Complementa a persistência via `clientStorage`, abaixo — o JSON serve para portar entre máquinas/templates diferentes.)
 
@@ -27,14 +24,23 @@ Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de
 
 ## 🤖 Ideias Ativas — Assistente
 
+### 2026-11-03 — Preparar a publicação na Figma Community (candidata a fase própria)
+Pesquisado em 2026-11-03 (docs do Figma): (1) **bloqueante:** plugin novo precisa de `"documentAccess": "dynamic-page"` no manifest, e nesse modo `figma.getNodeById` **lança erro** — o `code.js` usa a versão síncrona em `runGenerate`; trocar por `await figma.getNodeByIdAsync`; (2) `"networkAccess": { "allowedDomains": ["none"] }` para o selo «sem acesso à rede» em vez de «Unknown»; (3) o `id` é **atribuído pelo Figma** ao publicar — trocar o `framematch-plugin-v1` pelo dele (DEC-007 previa `id` fixo; muda antes da F5); (4) conta com 2FA, publicar pelo app desktop, ícone 128×128, capa 1920×1080, descrição, categoria, contato de suporte; (5) diretrizes: sem bug óbvio, sem mensagem de erro de desenvolvedor para o usuário, descrição fiel, link de documentação. Privacidade simples: o plugin lê arquivos locais escolhidos pelo usuário e não usa rede.
+
+### 2026-11-03 — UI em inglês (ou bilíngue) para a Community
+A interface é toda em pt-BR (`<html lang="pt-BR">`, textos e `alert`s). Na Community o público é global; inglês amplia o alcance. Opção barata: dicionário de strings `T.pt`/`T.en` escolhido por `navigator.language`. Só vale se a publicação for para o público geral.
+
+### 2026-11-03 — README de uso (vira a documentação do anúncio)
+O `README.md` tem só o título. As diretrizes do Figma pedem link de documentação de uso; um README com o fluxo dos 5 passos, formato do CSV, nomes de camada e limites (4 MB, PNG/JPG/GIF) serve aos dois. A estrutura do projeto estabilizou — é a hora.
+
+### 2026-11-03 — Resumo da grade com «Por linha» vazio mostra 5
+Medido no roteiro da 0.4.0 (item 8): com a caixa «Por linha» vazia ou `0`, o resumo diz «5 por linha» até sair do campo (`parseInt(...) || 5` em `updateGridInfo`). A geração está certa (o clamp corre antes); é só o texto. Correção de uma linha; juntar com outra mudança no Passo 5.
+
 ### 2026-11-03 — Avisar quando a exclusão do template falhar
 O `code.js` faz `try { tpl.remove(); } catch(e) {}`: se a exclusão falhar (template travado, por exemplo), ninguém fica sabendo — e no modo «no lugar do template» (DEC-010) ele fica escondido debaixo do 1º frame. Ideia: mandar um `warn` na mensagem `done` e mostrar no Passo 5. Pequena; sem pressa até alguém tropeçar.
 
 ### 2026-06-15 — Persistência automática via `figma.clientStorage` (recomendada)
-Lembrar automaticamente o último mapeamento, a configuração de grade e os checkboxes entre sessões, sem o usuário precisar exportar/importar nada. É o padrão dos bons plugins de dados do Figma e ataca a dor real de refazer o Passo 3 a cada uso. Mais simples para o caso comum que o "exportar JSON" (que continua útil para portar entre máquinas). Bom momento para implementar agora que o `id` do plugin foi fixado (DEC-007). → ROADMAP F5.
-
-### 2026-05-30 — Offset X/Y configurável no Passo 5
-Atualmente os frames gerados aparecem sempre à direita do template (`ox = TPL.x + TPL.w + 60`). Expor `ox` e `oy` como campos editáveis no Passo 5 daria controle sobre onde o grid aparece no canvas — útil quando o template fica em um canto específico da página. Encaixa bem agora que o Passo 5 ganhou o componente de stepper (DEC-006). **Status:** implementada na WO 0003 como ajuste somado ao ponto de partida, aguardando teste (DEC-010).
+Lembrar automaticamente o último mapeamento, a configuração de grade e os checkboxes entre sessões, sem o usuário precisar exportar/importar nada. É o padrão dos bons plugins de dados do Figma e ataca a dor real de refazer o Passo 3 a cada uso. Mais simples para o caso comum que o "exportar JSON" (que continua útil para portar entre máquinas). Bom momento para implementar agora que o `id` do plugin foi fixado (DEC-007). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo e o `clientStorage` fica preso a ele — implementar só com o `id` definitivo (ver «Preparar a publicação»). → ROADMAP F5.
 
 ### 2026-05-30 — Detecção de re-geração (frames duplicados)
 Antes de gerar, verificar se já existem clones do template no canvas para evitar sobreposição acidental. Poderia ser um aviso com opção de prosseguir ou cancelar.
@@ -62,6 +68,8 @@ Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por v
 - **Excluir template após gerar** — implementado em 0.3.0.
 - **Padrões dos checkboxes configuráveis** — implementado em 0.3.0.
 - **Stepper editável (botões + caixa) nos 3 campos do Passo 5** — implementado em 0.4.0 / ver DEC-006.
+- **Ao excluir o template, gerar o catálogo na posição dele** (ideia do dono, 2026-07-17) — implementada em 0.5.0 / ver DEC-010.
+- **Offset X/Y configurável no Passo 5** — implementado em 0.5.0 como ajuste somado ao ponto de partida / ver DEC-010.
 
 ---
 

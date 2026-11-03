@@ -41,6 +41,7 @@ Comece vazia e escreva quando doer duas vezes: técnica que você precisou expli
 - **Validação tem duas metades, e só uma é do Code.** `bash scripts/check.sh` responde «a sintaxe é ES5?» (guarda + `node --check`). «O plugin funciona?» só o Figma Desktop responde, e é do dono — mudança de comportamento ou UI fecha com roteiro de teste manual (forma do roteiro: `meta/workorders/_TEMPLATE.md`, «Quando o passo e do dono»).
 - **A ponte do chat grava em `.claude/` neste projeto** — medido em 2026-11-03 (criou `settings.json` e as três skills sem bloqueio). A regra genérica de «Regras de higiene» sobre `.claude/settings.json` continua valendo como cautela: mudança de permissão do executor é entregue pelo chat e citada na WO, nunca autoconcedida pelo Code.
 - **Slug dos relatórios do Code: `framematch`** → `../AAMMDD-HHMM-code-framematch-<ato>-<alvo>.txt`.
+- **Roteiro de teste do dono sai no MESMO turno da WO de código** — no corpo da resposta, logo depois da linha `/apply-wo`, com o aviso «rode só se o relatório da WO saiu VERDE e sem desvio». Ele deriva da spec e do texto exato da WO, que o chat já tem e simulou; esperar a aplicação custa ao dono um turno inteiro sem ganhar informação. Exceção: o relatório trouxer desvio que mexa em comportamento — aí o chat revisa o roteiro. (Pedido do dono em 2026-11-03, depois de a 0.4.0 e a 0.5.0 terem recebido o roteiro um turno depois da WO.)
 
 ## Princípios de trabalho
 

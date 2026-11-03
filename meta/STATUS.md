@@ -7,7 +7,7 @@
 ---
 
 ## Versão Atual
-**[0.4.0]** — 2026-11-03 — nome **FrameMatch** + stepper editável no Passo 5; validada no Figma Desktop (roteiro de 12 itens).
+**[0.5.0]** — 2026-11-03 — Offset X/Y no Passo 5 + catálogo no lugar do template ao excluir (DEC-010); validada no Figma Desktop (roteiro de 11 itens).
 
 ## ✅ Funcionando
 
@@ -22,10 +22,11 @@
 - Imagens transferidas como `ArrayBuffer → Array.from(Uint8Array)` — sem compressão, sem corrupção de transparência.
 - Nome **FrameMatch** no Figma (`id` `framematch-plugin-v1`, DEC-007).
 - Passo 5 com stepper editável `[−] [caixa] [+]` nos 3 campos, clamp ao sair do campo (Por linha ≥ 1, Espaços ≥ 0) e geração usando os valores (DEC-006).
+- Offset X/Y no Passo 5 (passo 10, aceita negativos, vazio → 0) somado ao ponto de partida; ponto de partida segue «Excluir template» (no lugar dele ou à direita, +60 px); origem calculada com o template na hora de gerar (DEC-010).
 
 ## 🔧 Em Progresso
 
-- **0.5.0 — implementada, aguardando teste no Figma:** Offset X/Y no Passo 5 + catálogo no lugar do template ao excluir + origem calculada com o template vivo (spec `meta/specs/261103-offset-e-posicao-do-grid.md`, DEC-010).
+- Nada em progresso. Próxima frente: decisão do dono (ver «Última conversa» e Backlog).
 
 ## ❌ Quebrado / Com Problema
 
@@ -33,10 +34,11 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Testar a 0.5.0 no Figma Desktop** — roteiro do chat a partir dos critérios de aceite da spec.
-- [ ] Depois: detecção de re-geração (resto da F4) ou `clientStorage` (F5).
+- [ ] **Decidir a próxima frente:** preparar a publicação na Community (recomendado ANTES da F5 — o Figma atribui um `id` novo ao publicar e o `clientStorage` fica preso a ele), detecção de re-geração (resto da F4) ou `clientStorage` (F5). Opções detalhadas no IDEAS (2026-11-03).
 
 ## 💬 Última conversa
+
+**2026-11-03 (fim da noite)** — **0.5.0 lançada** (roteiro de 11 itens no Figma, todos ok). Pesquisados os requisitos de publicação na Community: o manifest precisa de `documentAccess: "dynamic-page"` e, com ele, `figma.getNodeById` (síncrono, usado no `code.js`) passa a lançar erro — trocar por `getNodeByIdAsync`; o `id` é atribuído pelo Figma ao publicar. Ideias de publicação, UI em inglês e README registradas no IDEAS. Regra nova no CEREBRO: roteiro do dono sai no mesmo turno da WO de código.
 
 **2026-11-03 (noite)** — F4: spec do Offset X/Y + catálogo no lugar do template aprovada (`meta/specs/`, primeira spec do projeto) e implementada pela WO 0003 (DEC-010). Aguarda o roteiro de teste no Figma para virar 0.5.0.
 
