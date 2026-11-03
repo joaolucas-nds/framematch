@@ -7,9 +7,7 @@
 ---
 
 ## Versão Atual
-**[0.3.0]** — 2026-05-30 — última versão **validada** (múltiplos slots de imagem + correção do bug de espaços duplos).
-
-> **0.4.0 (rename FrameMatch + stepper editável do Passo 5)** está implementado nesta sessão (2026-06-15), porém **ainda não testado no Figma** — está em "Em Progresso" e em `[Não lançado]` no CHANGELOG. Vira versão lançada após o primeiro teste bem-sucedido.
+**[0.4.0]** — 2026-11-03 — nome **FrameMatch** + stepper editável no Passo 5; validada no Figma Desktop (roteiro de 12 itens).
 
 ## ✅ Funcionando
 
@@ -22,12 +20,12 @@
 - Limitador de tamanho (padrão: 4 MB): imagens grandes aparecem em laranja e são puladas.
 - Checkboxes "Ocultar template" e "Excluir template" com padrões configuráveis no topo do script.
 - Imagens transferidas como `ArrayBuffer → Array.from(Uint8Array)` — sem compressão, sem corrupção de transparência.
+- Nome **FrameMatch** no Figma (`id` `framematch-plugin-v1`, DEC-007).
+- Passo 5 com stepper editável `[−] [caixa] [+]` nos 3 campos, clamp ao sair do campo (Por linha ≥ 1, Espaços ≥ 0) e geração usando os valores (DEC-006).
 
 ## 🔧 Em Progresso
 
-- **0.4.0 — implementado, aguardando teste no Figma:**
-  - Rename CatalogFiller → **FrameMatch** (manifest, `code.js`, documentos) — ver DEC-007.
-  - **Stepper editável** nos 3 campos do Passo 5 (Por linha, Espaço X, Espaço Y): botões +/− para ajuste fino **e** caixa para digitar valores grandes — ver DEC-006.
+- Nada em progresso. Próxima frente no Backlog.
 
 ## ❌ Quebrado / Com Problema
 
@@ -35,14 +33,11 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Testar o stepper editável (0.4.0):** clicar +/−, digitar valor direto, digitar valor inválido/vazio e sair do campo (clamp), conferir que o resumo da grade atualiza e que a geração usa os valores corretos.
-- [ ] Confirmar que o Figma reflete o novo nome **FrameMatch** após substituir os arquivos; se não, re-importar o `manifest.json` uma vez (o `id` mudou — ver DEC-007).
-- [ ] Testar 0.3.0/0.4.0 com um CSV real e pasta de imagens, confirmando o bug dos espaços duplos resolvido e múltiplos slots funcionando.
-- [ ] Confirmar que PNG com transparência chega sem fundo preto.
 - [ ] **Retomar o desenvolvimento:** Offset X/Y no Passo 5 + posição do template ao excluir (F4), depois `clientStorage` (F5).
-- [ ] **Colar `INSTRUCOES-DO-PROJETO.md` no painel do Projeto do claude.ai** (o arquivo da raiz é a fonte; o painel é a cópia — DEC-009).
 
 ## 💬 Última conversa
+
+**2026-11-03 (tarde)** — **0.4.0 lançada:** roteiro de 12 itens no Figma Desktop, todos ok (nome, Passo 5, geração com os valores, espaços duplos, múltiplos slots, PNG transparente). Criado `.gitattributes` (`*.sh text eol=lf`) para o `check.sh` não quebrar com CRLF (CONTEXT, armadilha #8). Instruções do Projeto já coladas no painel. Próximo passo: F4 — Offset X/Y + posição do template ao excluir.
 
 **2026-11-03** — Merge do template-update do KCM **v1.133.0** e migração do modo de trabalho para **Claude Code + WO** (DEC-009, substitui DEC-008). CEREBRO adotado do kit, com a seção «Técnicas específicas» do FrameMatch; criados na raiz `INSTRUCOES-DO-PROJETO.md` e `CLAUDE.md`; `.claude/` com `settings.json` e as skills `/apply-wo`, `/wrap`, `/sondar`; `scripts/check.sh` (guarda ES5 + `node --check`); `HISTORICO.md` → `HISTORY.md`; Arquivos Críticos movidos para o CONTEXT; `meta/ASU/` arquivado fora do repo. A 0.4.0 foi commitada (`f83a66d`) antes do merge. Próximo passo óbvio: testar a 0.4.0 no Figma Desktop (backlog acima).
 

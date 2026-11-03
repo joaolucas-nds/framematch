@@ -102,6 +102,7 @@ Fluxo do matching para uma imagem:
 5. **Payload grande no `postMessage`** — imagem acima de ~4MB como array de inteiros explode o JSON (cada byte vira ~1–3 chars) e trava o runtime WASM. → Limitar por `SIZE_LIMIT_MB` e alertar. Ver DEC-003 e HISTORY §2.
 6. **`getNodeByIdAsync`** — na API 1.0.0 `figma.getNodeById` é síncrono; não usar a versão async. Ver DEC-001.
 7. **WebP enviado ao `figma.createImage`** — o Figma aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Converter WebP→PNG via canvas cairia na corrupção de transparência da armadilha #2. → Usar PNG/JPG; para reduzir tamanho mantendo alpha, comprimir offline em PNG. Detalhe em HISTORY §4 / DEC nenhum (constraint externo, registrado no IDEAS como descartado).
+8. **Script `.sh` com fim de linha CRLF** — o `core.autocrlf` do Git no Windows converte LF→CRLF no checkout, e o bash falha com `$'\r': command not found` ao rodar `scripts/check.sh`. → O `.gitattributes` fixa `*.sh text eol=lf`; script novo de shell herda a regra.
 
 ## 📁 Arquivos Críticos (não mexer sem contexto)
 

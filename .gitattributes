@@ -1,0 +1,3 @@
+# Fim de linha fixo em LF para scripts de shell: o autocrlf do Git no Windows
+# converteria para CRLF no checkout e o bash quebraria com $'\r' (CONTEXT, armadilha #8).
+*.sh text eol=lf

@@ -7,7 +7,13 @@
 
 ## [Não lançado]
 
-> Implementado em 2026-06-15, **aguardando teste no Figma**. Vira **0.4.0** após validação.
+_(nada ainda)_
+
+---
+
+## [0.4.0] — 2026-11-03
+
+> Implementada em 2026-06-15; validada no Figma Desktop em 2026-11-03 (roteiro de 12 itens, todos ok: nome, layout e valores do Passo 5, botões, digitação, clamp, geração com os valores, espaços duplos, múltiplos slots, PNG transparente).
 
 ### Modificado
 - **Renomeado o projeto de CatalogFiller para FrameMatch** (DEC-007): `manifest.json` (`name` e `id` → `framematch-plugin-v1`), cabeçalho de `code.js` e todos os documentos de contexto. O `id` do manifest mudou — pode exigir re-importar o manifest no Figma uma vez.
