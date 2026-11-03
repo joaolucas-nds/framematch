@@ -112,12 +112,12 @@ Se dois slots apontam para a mesma coluna CSV e os arquivos têm o mesmo nome, o
 No Passo 5, "Por linha" usava apenas botões +/− com um display estático (ótimo para ajuste fino, lento para saltos grandes), enquanto "Espaço X" e "Espaço Y" eram inputs numéricos crus, sem botões. Resultado: inconsistência visual e dificuldade de mudar valores grandes rapidamente.
 
 ### Decisão
-Um único controle `num-stepper` no formato `[−] [caixa editável] [+]`, aplicado aos **3 campos** (Por linha, Espaço X, Espaço Y). Os botões fazem ajuste pelo passo (Por linha: passo 1, mín. 1; Espaços: passo 5, mín. 0); a caixa central aceita digitação direta para valores grandes. Toda a lógica é centralizada em dois helpers ES5: `stepField(id, delta, min, step)` e `clampField(id, min)` (sanitiza valor digitado ao sair do campo). As setas nativas do `input[type=number]` foram ocultadas (o ajuste é pelos botões). Layout do Passo 5 mudou de grid de 3 colunas para pilha vertical (label à esquerda, stepper à direita) para caber bem na largura estreita da janela do plugin.
+Um único controle `num-stepper` no formato `[−] [caixa editável] [+]`, aplicado aos **3 campos** (Por linha, Espaço X, Espaço Y). Os botões fazem ajuste pelo passo (Por linha: passo 1, mín. 1; Espaços: passo 5, mín. 0); a caixa central aceita digitação direta para valores grandes. Toda a lógica é centralizada em dois helpers ES5: `stepField(id, delta, min, step)` e `clampField(id, min)` (sanitiza valor digitado ao sair do campo). As setas nativas do `input[type=number]` foram ocultadas (o ajuste é pelos botões). Layout do Passo 5: os 3 campos ficam lado a lado (label em cima, stepper embaixo), compactos e sem gaps inúteis — mantém o arranjo horizontal familiar. (Uma tentativa intermediária de pilha vertical com label à esquerda foi revertida em 2026-07-17: criava espaço morto entre label e stepper; a janela de 520px comporta os 3 lado a lado com folga.)
 
 ### Alternativas consideradas
 - **Só caixa de texto** — perderia o ajuste por clique, que o usuário considerou intuitivo.
 - **Só botões (estado anterior do "Por linha")** — ruim para valores grandes.
-- **Três colunas lado a lado** — não cabe confortavelmente na janela estreita do plugin; daí a pilha vertical.
+- **Pilha vertical (label à esquerda, stepper à direita)** — tentada e revertida: gerava espaço morto (gap) entre label e stepper. A janela de 520px cabe os 3 lado a lado, que é o arranjo preferido.
 
 ### Consequências
 Consistência visual e um único componente para manter. O `g-cols` deixou de ser `input[type=hidden]` e virou input visível, então a validação de mínimo precisa rodar tanto no clique (`stepField`) quanto na digitação direta (`clampField` no `onchange`). O payload de geração não mudou — `parseInt` lê os mesmos ids (`g-cols`, `g-cg`, `g-rg`).
@@ -143,6 +143,26 @@ Identidade do projeto unificada. **Atenção operacional:** como o `id` do manif
 
 ---
 
+## DEC-008 — Modo de trabalho: ASU ativo, chat escolhe; Code+specs descartado
+**Data:** 2026-07-17 · **Status:** aceita
+
+### Contexto
+Chegou o template-update do KCM v1.72.0 (assume modo Code, specs em `meta/specs/`, comandos como skills). Avaliamos três modos de manter os docs: (a) chat + arquivo inteiro, (b) Claude Code + specs, (c) ASU (ferramenta Python que aplica instruções YAML de delta).
+
+### Decisão
+Manter **modo ASU ativo**, com o chat **escolhendo caso a caso** entre entregar o arquivo inteiro (arquivo novo/pequeno ou reescrita de fundo) e emitir uma instrução ASU (delta pontual num doc já existente). **Code + specs descartado** como overkill para este projeto.
+
+### Alternativas consideradas
+- **Code + specs** — descartado: brilha em repo grande com build/teste; o FrameMatch tem 3 arquivos e só valida DENTRO do Figma Desktop (o Code não roda nem testa o plugin). Cerimônia de spec para 9 docs pequenos custa mais do que economiza.
+- **Só arquivo inteiro** — bom padrão, mas regenerar um doc de ~13KB por uma linha desperdiça tokens; o ASU corta esse custo quando o doc é grande.
+
+### Consequências
+- `meta/` confirmado como pasta dos docs (sempre foi — erro meu anterior por não ler o `_MANIFEST.md` do FlatDrop).
+- Passa-se a usar **`HISTORY.md`** (não `HISTORICO.md`) daqui pra frente — rename pendente.
+- Se um dia adotar Code: comandos como **skills** (`.claude/skills/`), não `commands` (legado).
+- Break-even do ASU é apertado com docs pequenos (menos de ~10-15KB); por isso o chat escolhe, não aplica cegamente.
+
+---
 ## FIX-001 — Bug de espaços duplos: normName colapsava espaços, norm() do code.js não
 **Data:** 2026-05-30
 

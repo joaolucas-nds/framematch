@@ -63,11 +63,10 @@ select option { background: #1e1e1e; }
 /* Checkbox labels */
 .chk-label { display: flex; align-items: center; gap: 6px; color: #bbb; font-size: 11px; text-transform: none; letter-spacing: 0; font-weight: 400; cursor: pointer; user-select: none; }
 .chk-label input[type=checkbox] { width: 13px; height: 13px; cursor: pointer; accent-color: #18a0fb; flex-shrink: 0; }
-/* Passo 5 — cada campo numérico em sua própria linha: label à esquerda, stepper à direita.
-   Pilha vertical garante caber na largura estreita da janela do plugin. */
-.g-p5 { display: flex; flex-direction: column; gap: 9px; }
-.g-p5 .field-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.g-p5 .field-row > label { margin-bottom: 0; flex: 1; min-width: 0; }
+/* Passo 5 — os 3 campos lado a lado: label em cima, stepper embaixo. Compacto, sem gaps inúteis. */
+.g-p5 { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
+.g-p5 .field-col { display: flex; flex-direction: column; gap: 5px; }
+.g-p5 .field-col > label { margin-bottom: 0; white-space: nowrap; }
 /* Grid for text mappings */
 .map-row { display: grid; grid-template-columns: 1fr 14px 1fr; gap: 6px; align-items: center; margin-bottom: 6px; }
 /* Grid for image slot rows: col → layer scale × */
@@ -236,7 +235,7 @@ select option { background: #1e1e1e; }
     <div class="card-title">Grade</div>
     <div class="g-p5">
       <!-- Por linha — stepper editável: botões p/ ajuste fino + caixa p/ digitar -->
-      <div class="field-row">
+      <div class="field-col">
         <label>Por linha</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-cols-minus" type="button">−</button>
@@ -245,8 +244,8 @@ select option { background: #1e1e1e; }
         </div>
       </div>
       <!-- Espaço X (horizontal) — mesmo stepper editável -->
-      <div class="field-row">
-        <label>Espaço X — horizontal (px)</label>
+      <div class="field-col">
+        <label>Espaço X (px)</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-cg-minus" type="button">−</button>
           <input type="number" id="g-cg" value="55" min="0" step="5">
@@ -254,8 +253,8 @@ select option { background: #1e1e1e; }
         </div>
       </div>
       <!-- Espaço Y (vertical) — mesmo stepper editável -->
-      <div class="field-row">
-        <label>Espaço Y — vertical (px)</label>
+      <div class="field-col">
+        <label>Espaço Y (px)</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-rg-minus" type="button">−</button>
           <input type="number" id="g-rg" value="50" min="0" step="5">

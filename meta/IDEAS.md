@@ -17,6 +17,9 @@ Ferramenta separada (Python + Pillow) que:
 - Nunca renomeia — diferencia original de comprimido apenas por pasta
 - **Saída sempre em PNG/JPG, NUNCA WebP** — o Figma rejeita WebP no `figma.createImage` (ver Descartadas). Para fotos sem transparência, JPG; para imagens com alpha, PNG otimizado (redução de paleta tipo *pngquant*) preserva a transparência e ainda encolhe bastante.
 
+### 2026-07-17 — Ao excluir o template, gerar o catálogo na posição dele
+Hoje o grid nasce sempre à **direita** do template (`ox = TPL.x + TPL.w + 60`), independente de excluir ou não. Quando "Excluir template após gerar" está marcado, sobra um **buraco** onde o template estava e o catálogo fica deslocado. Ideia: se `deleteTemplate` estiver marcado, gerar o grid **começando na posição original do template** (`ox = TPL.x`, `oy = TPL.y`), ocupando o espaço dele. Mudança pequena e condicional no payload de grade; pareia naturalmente com a ideia de offset X/Y (F4). **Status:** não implementada; não estava registrada até agora (relacionada, mas distinta, da ideia de "offset X/Y configurável").
+
 ### 2026-05 — Exportar mapeamento atual (JSON)
 Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de imagem, grade) como JSON para reutilizar em sessões futuras sem refazer do zero. Especialmente útil quando o mesmo template é usado repetidamente. (Complementa a persistência via `clientStorage`, abaixo — o JSON serve para portar entre máquinas/templates diferentes.)
 
