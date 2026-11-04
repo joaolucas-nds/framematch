@@ -26,7 +26,7 @@
 
 ## 🔧 Em Progresso
 
-- Nada em progresso. Próxima frente: decisão do dono (ver «Última conversa» e Backlog).
+- **0.6.0 — implementada, aguardando teste no Figma:** preparação da publicação na Community — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão falha (spec `meta/specs/261104-publicacao-community-0.6.0.md`, DEC-011).
 
 ## ❌ Quebrado / Com Problema
 
@@ -34,9 +34,13 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Decidir a próxima frente:** preparar a publicação na Community (recomendado ANTES da F5 — o Figma atribui um `id` novo ao publicar e o `clientStorage` fica preso a ele), detecção de re-geração (resto da F4) ou `clientStorage` (F5). Opções detalhadas no IDEAS (2026-11-03).
+- [ ] **Testar a 0.6.0 no Figma Desktop** — roteiro do chat (2026-11-04).
+- [ ] **Publicar:** prints do carrossel com a UI em inglês, revisar os textos e o ícone em `../261104-figma-listing/`, 2FA ligado, «Publish» no app desktop.
+- [ ] **Depois do Publish:** trocar o `id` do `manifest.json` pelo que o Figma atribuir (WO pequena) — só então a F5 (`clientStorage`).
 
 ## 💬 Última conversa
+
+**2026-11-04** — Preparação da publicação na Community como **0.6.0** (decisão do dono: pública, UI em inglês): spec, DEC-011, WO 0005 (manifest `dynamic-page`, `getNodeByIdAsync`, tradução, README, erro amigável, aviso de exclusão). Pacote do anúncio (textos, ícone, capa, roteiro de prints, CSV e imagens de exemplo) em `../261104-figma-listing/`.
 
 **2026-11-03 (fim da noite)** — **0.5.0 lançada** (roteiro de 11 itens no Figma, todos ok). Pesquisados os requisitos de publicação na Community: o manifest precisa de `documentAccess: "dynamic-page"` e, com ele, `figma.getNodeById` (síncrono, usado no `code.js`) passa a lançar erro — trocar por `getNodeByIdAsync`; o `id` é atribuído pelo Figma ao publicar. Ideias de publicação, UI em inglês e README registradas no IDEAS. Regra nova no CEREBRO: roteiro do dono sai no mesmo turno da WO de código.
 

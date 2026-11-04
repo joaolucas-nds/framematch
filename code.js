@@ -40,7 +40,7 @@ figma.ui.onmessage = function(msg) {
   if (msg.type === 'get-selection') {
     var sel = figma.currentPage.selection;
     if (!sel || sel.length === 0) {
-      figma.ui.postMessage({ type: 'sel', ok: false, err: 'Nada selecionado. Selecione um frame no Figma primeiro.' });
+      figma.ui.postMessage({ type: 'sel', ok: false, err: 'Nothing is selected. Select a frame in Figma first.' });
       return;
     }
     var node = sel[0];
@@ -77,8 +77,9 @@ async function loadAllFontsInNode(node) {
 
 async function runGenerate(msg) {
   try {
-    var tpl = figma.getNodeById(msg.templateId);
-    if (!tpl) { figma.ui.postMessage({ type: 'err', msg: 'Template nao encontrado. Volte ao Passo 2.' }); return; }
+    // dynamic-page (DEC-011): a leitura síncrona por id lança erro nesse modo; usar a versão Async.
+    var tpl = await figma.getNodeByIdAsync(msg.templateId);
+    if (!tpl) { figma.ui.postMessage({ type: 'err', msg: 'The template frame was not found (was it deleted?). Go back to Step 2 and select it again.' }); return; }
 
     await loadAllFontsInNode(tpl);
 
@@ -156,13 +157,17 @@ async function runGenerate(msg) {
     // Ocultar e/ou excluir template
     // ─── Para alterar o padrão de cada opção, edite os checkboxes no ui.html ───
     if (msg.hideTemplate)   { try { tpl.visible = false; } catch(e) {} }
-    if (msg.deleteTemplate) { try { tpl.remove();         } catch(e) {} }
+    // Exclusão que falha (ex.: template travado) não pode ser muda: no modo «no lugar do
+    // template» ele ficaria escondido sob o 1º frame. A UI avisa (DEC-011).
+    var templateNotRemoved = false;
+    if (msg.deleteTemplate) { try { tpl.remove(); } catch(e) { templateNotRemoved = true; } }
 
     figma.currentPage.selection = clones;
     figma.viewport.scrollAndZoomIntoView(clones);
-    figma.ui.postMessage({ type: 'done', count: msg.rows.length });
+    figma.ui.postMessage({ type: 'done', count: msg.rows.length, templateNotRemoved: templateNotRemoved });
 
   } catch(err) {
-    figma.ui.postMessage({ type: 'err', msg: String(err.message || err) });
+    // Frase para o usuário + detalhe técnico para o suporte (diretrizes de revisão do Figma, DEC-011).
+    figma.ui.postMessage({ type: 'err', msg: 'Something went wrong while generating. Details: ' + String(err.message || err) });
   }
 }

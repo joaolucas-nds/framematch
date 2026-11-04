@@ -36,6 +36,14 @@
 - 🟢 **Offset X/Y do grid** + catálogo no lugar do template ao excluir (DEC-010) — *lançado na 0.5.0 (2026-11-03).*
 - [ ] **Detecção de re-geração** — avisar se já existem clones do template antes de gerar.
 
+## 🟡 F4.5 — Publicação na Figma Community *(em curso — 2026-11-04)*
+**Objetivo:** publicar o FrameMatch na Community, pública, com a UI em inglês (DEC-011).
+**Critério de conclusão:** plugin aprovado na revisão e listado; `manifest.json` com o `id` atribuído pelo Figma.
+- [ ] **0.6.0** — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão — *implementado, aguardando teste.*
+- [ ] Anúncio: textos, ícone 128×128, capa 1920×1080, carrossel (`../261104-figma-listing/`).
+- [ ] «Publish» no app desktop (2FA) e aprovação na revisão.
+- [ ] Trocar o `id` do manifest pelo do Figma.
+
 ## 🔵 F5 — Persistência de configuração *(futuro)*
 **Objetivo:** eliminar a necessidade de refazer o mapeamento para templates recorrentes.
 - **Persistência automática via `figma.clientStorage`** — lembra último mapeamento, grade e checkboxes entre sessões (caso comum). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo, e o `clientStorage` fica preso a ele — fazer a F5 só com o `id` definitivo.

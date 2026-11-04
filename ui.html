@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <style>
@@ -112,19 +112,19 @@ select option { background: #1e1e1e; }
 
 <!-- ═══ P1 CSV ══════════════════════════════════════════════════ -->
 <div class="panel active" id="p1">
-  <h2>📊 Planilha CSV</h2>
-  <p class="sub">Exporte do Google Sheets: <strong style="color:#ccc">Arquivo → Fazer download → CSV</strong> e carregue aqui.</p>
+  <h2>📊 CSV spreadsheet</h2>
+  <p class="sub">Export from Google Sheets: <strong style="color:#ccc">File → Download → Comma-separated values (.csv)</strong> and load it here.</p>
   <div class="dz">
     <input type="file" id="f-csv" accept=".csv,.txt">
     <div class="dz-icon">📂</div>
-    <div class="dz-title">Clique para selecionar o CSV</div>
-    <div class="dz-sub">ou arraste o arquivo aqui</div>
+    <div class="dz-title">Click to choose the CSV file</div>
+    <div class="dz-sub">or drag the file here</div>
   </div>
   <div id="p1-ok" style="display:none; margin-top:10px;">
     <div class="box-ok">✅ <strong id="csv-name"></strong> — <span id="csv-info"></span></div>
-    <div class="card"><div class="card-title">Colunas</div><div id="csv-tags"></div></div>
+    <div class="card"><div class="card-title">Columns</div><div id="csv-tags"></div></div>
     <div class="card">
-      <div class="card-title">Pré-visualização</div>
+      <div class="card-title">Preview</div>
       <div class="tbl-wrap"><table><thead id="csv-th"></thead><tbody id="csv-tb"></tbody></table></div>
     </div>
   </div>
@@ -132,13 +132,13 @@ select option { background: #1e1e1e; }
 
 <!-- ═══ P2 TEMPLATE ═════════════════════════════════════════════ -->
 <div class="panel" id="p2">
-  <h2>📐 Frame Template</h2>
-  <p class="sub">Selecione o frame template no Figma e clique abaixo. Se o frame tiver um nome padrão reconhecido, ele é detectado automaticamente.</p>
-  <div class="box-inf">💡 Camada de texto chamada <strong style="color:#ddd">Marca</strong> recebe a coluna <strong style="color:#ddd">Marca</strong>. Para imagem, o nome pode ser qualquer um — você mapeia no Passo 3.</div>
+  <h2>📐 Template frame</h2>
+  <p class="sub">Select the template frame in Figma and click below. If the frame has a recognized default name, it is detected automatically.</p>
+  <div class="box-inf">💡 A text layer named <strong style="color:#ddd">Brand</strong> receives the <strong style="color:#ddd">Brand</strong> column. Image layers can have any name — you map them in Step 3.</div>
   <div id="p2-auto-hint" class="box-ok" style="display:none; margin-bottom:8px;">
-    🎯 Frame detectado automaticamente pelo nome.
+    🎯 Frame detected automatically by its name.
   </div>
-  <button class="btn btn-primary btn-full" id="btn-sel" style="margin-bottom:10px;">📌 Usar Frame Selecionado no Figma</button>
+  <button class="btn btn-primary btn-full" id="btn-sel" style="margin-bottom:10px;">📌 Use the frame selected in Figma</button>
   <div id="p2-err" class="box-err" style="display:none;"></div>
   <div id="p2-ok" style="display:none;">
     <div class="card">
@@ -146,7 +146,7 @@ select option { background: #1e1e1e; }
         <strong id="tpl-name" style="color:#fff;"></strong>
         <span id="tpl-size" style="color:#555;font-size:10px;"></span>
       </div>
-      <div class="card-title">Camadas</div>
+      <div class="card-title">Layers</div>
       <div class="scroll" id="tpl-layers"></div>
     </div>
   </div>
@@ -154,19 +154,19 @@ select option { background: #1e1e1e; }
 
 <!-- ═══ P3 MAPEAMENTO ════════════════════════════════════════════ -->
 <div class="panel" id="p3">
-  <h2>🔗 Mapeamento</h2>
-  <p class="sub">Conecte cada coluna CSV à camada correta no frame.</p>
+  <h2>🔗 Mapping</h2>
+  <p class="sub">Connect each CSV column to the right layer in the frame.</p>
 
   <!-- Texto -->
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <div class="card-title" style="margin:0;">Campos de Texto</div>
-      <button class="btn btn-secondary" id="btn-auto" style="font-size:10px;padding:3px 9px;">✨ Auto-mapear</button>
+      <div class="card-title" style="margin:0;">Text fields</div>
+      <button class="btn btn-secondary" id="btn-auto" style="font-size:10px;padding:3px 9px;">✨ Auto-map</button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 14px 1fr;gap:6px;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid #333;">
-      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Coluna CSV</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">CSV column</span>
       <span></span>
-      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Camada Figma</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Figma layer</span>
     </div>
     <div id="text-maps"></div>
   </div>
@@ -174,52 +174,52 @@ select option { background: #1e1e1e; }
   <!-- Imagem (múltiplos slots) -->
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-      <div class="card-title" style="margin:0;">Campos de Imagem</div>
-      <button class="btn btn-secondary" id="btn-add-slot" style="font-size:10px;padding:3px 9px;">＋ Adicionar slot</button>
+      <div class="card-title" style="margin:0;">Image fields</div>
+      <button class="btn btn-secondary" id="btn-add-slot" style="font-size:10px;padding:3px 9px;">＋ Add slot</button>
     </div>
     <!-- Cabeçalho das colunas -->
     <div style="display:grid;grid-template-columns:1fr 14px 1fr 54px 22px;gap:5px;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid #2a2a2a;">
-      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Coluna CSV</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">CSV column</span>
       <span></span>
-      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Camada Figma</span>
-      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Modo</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Figma layer</span>
+      <span style="font-size:9px;color:#444;font-weight:700;text-transform:uppercase;">Mode</span>
       <span></span>
     </div>
     <div id="imap-slots"></div>
     <div id="imap-empty" style="color:#444;font-size:10px;padding:4px 0;display:none;">
-      Nenhum slot de imagem. Clique em <strong style="color:#555;">＋ Adicionar slot</strong> ou use Auto-mapear.
+      No image slots yet. Click <strong style="color:#555;">＋ Add slot</strong> or use Auto-map.
     </div>
   </div>
 </div>
 
 <!-- ═══ P4 IMAGENS ═══════════════════════════════════════════════ -->
 <div class="panel" id="p4">
-  <h2>🖼️ Imagens</h2>
-  <p class="sub">Selecione a pasta com <strong style="color:#ccc">todas</strong> as imagens. Apenas as que tiverem correspondência nos slots configurados serão carregadas.</p>
+  <h2>🖼️ Images</h2>
+  <p class="sub">Choose the folder with <strong style="color:#ccc">all</strong> the images. Only the ones that match the configured slots are loaded.</p>
   <div class="box-inf">
-    💡 <strong style="color:#ddd;">Matching inteligente:</strong> ignora caracteres especiais, espaços extras, *, #, _, / e similares — só letras e números importam na comparação. Imagens acima de <strong style="color:#ddd;" id="p4-limit-label"></strong> são puladas (chip laranja).
+    💡 <strong style="color:#ddd;">Smart matching:</strong> ignores special characters, extra spaces, *, #, _, / and the like — only letters and numbers count in the comparison. Images over <strong style="color:#ddd;" id="p4-limit-label"></strong> are skipped (orange chip).
   </div>
   <div class="dz">
     <input type="file" id="f-imgs" multiple accept="image/*" webkitdirectory>
     <div class="dz-icon">🗂️</div>
-    <div class="dz-title">Clique para selecionar a pasta de imagens</div>
-    <div class="dz-sub">JPG, PNG, WEBP — subpastas incluídas automaticamente</div>
+    <div class="dz-title">Click to choose the image folder</div>
+    <div class="dz-sub">JPG, PNG, GIF — subfolders included automatically</div>
   </div>
-  <div id="p4-loading" style="display:none; margin-top:10px; color:#555; font-size:11px;">⏳ Filtrando imagens...</div>
+  <div id="p4-loading" style="display:none; margin-top:10px; color:#555; font-size:11px;">⏳ Filtering images...</div>
   <div id="p4-ok" style="display:none; margin-top:10px;">
     <div class="card">
       <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-        <span><strong id="img-total-found" style="color:#fff;"></strong> <span style="color:#555;">arquivos na pasta</span></span>
-        <span style="color:#1bc47d;font-size:10px;font-weight:700;"><span id="img-matches"></span> serão inseridas</span>
+        <span><strong id="img-total-found" style="color:#fff;"></strong> <span style="color:#555;">files in the folder</span></span>
+        <span style="color:#1bc47d;font-size:10px;font-weight:700;"><span id="img-matches"></span> will be inserted</span>
       </div>
       <div id="p4-oversized-wrap" style="display:none; margin-bottom:8px;" class="box-wrn">
         ⚠️ <span id="p4-oversized-msg"></span>
       </div>
       <div class="card-title">
-        Status por produto —
+        Status per product —
         <span style="color:#1bc47d;">■ ok</span>
-        <span style="color:#ffbc40; margin-left:4px;">■ grande</span>
-        <span style="color:#ff7a7a; margin-left:4px;">■ não encontrada</span>
+        <span style="color:#ffbc40; margin-left:4px;">■ too large</span>
+        <span style="color:#ff7a7a; margin-left:4px;">■ not found</span>
       </div>
       <div id="p4-slots-status"></div>
     </div>
@@ -228,15 +228,15 @@ select option { background: #1e1e1e; }
 
 <!-- ═══ P5 GERAR ═════════════════════════════════════════════════ -->
 <div class="panel" id="p5">
-  <h2>🚀 Configurar e Gerar</h2>
-  <p class="sub">Configure o layout da grade e gere os frames do catálogo.</p>
+  <h2>🚀 Set up and generate</h2>
+  <p class="sub">Set the grid layout and generate the catalog frames.</p>
 
   <div class="card">
-    <div class="card-title">Grade</div>
+    <div class="card-title">Grid</div>
     <div class="g-p5">
       <!-- Por linha — stepper editável: botões p/ ajuste fino + caixa p/ digitar -->
       <div class="field-col">
-        <label>Por linha</label>
+        <label>Per row</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-cols-minus" type="button">−</button>
           <input type="number" id="g-cols" value="5" min="1" step="1">
@@ -245,7 +245,7 @@ select option { background: #1e1e1e; }
       </div>
       <!-- Espaço X (horizontal) — mesmo stepper editável -->
       <div class="field-col">
-        <label>Espaço X (px)</label>
+        <label>Gap X (px)</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-cg-minus" type="button">−</button>
           <input type="number" id="g-cg" value="55" min="0" step="5">
@@ -254,7 +254,7 @@ select option { background: #1e1e1e; }
       </div>
       <!-- Espaço Y (vertical) — mesmo stepper editável -->
       <div class="field-col">
-        <label>Espaço Y (px)</label>
+        <label>Gap Y (px)</label>
         <div class="num-stepper">
           <button class="btn-adj" id="btn-rg-minus" type="button">−</button>
           <input type="number" id="g-rg" value="50" min="0" step="5">
@@ -296,24 +296,24 @@ select option { background: #1e1e1e; }
   <div class="card">
     <div style="display:flex;gap:20px;flex-wrap:wrap;">
       <label class="chk-label" id="lbl-hide">
-        <input type="checkbox" id="hide-tpl"> Ocultar template após gerar
+        <input type="checkbox" id="hide-tpl"> Hide template after generating
       </label>
       <label class="chk-label">
-        <input type="checkbox" id="del-tpl"> Excluir template após gerar
+        <input type="checkbox" id="del-tpl"> Delete template after generating
       </label>
     </div>
     <div id="del-warn" style="display:none;margin-top:7px;font-size:10px;color:#ff9944;">
-      ⚠️ O frame template será <strong>removido permanentemente</strong> do Figma após a geração.
+      ⚠️ The template frame will be <strong>permanently removed</strong> from Figma after generating.
     </div>
   </div>
 
   <div class="card" id="gen-summary"></div>
 
-  <button class="btn btn-big" id="btn-gen">⚡ Gerar Catálogo</button>
+  <button class="btn btn-big" id="btn-gen">⚡ Generate catalog</button>
 
   <div id="gen-prog" style="display:none;margin-top:10px;">
     <div style="display:flex;justify-content:space-between;margin-bottom:3px;">
-      <span style="color:#666;">Gerando frames...</span>
+      <span style="color:#666;">Generating frames...</span>
       <span id="prog-txt" style="color:#18a0fb;font-weight:700;"></span>
     </div>
     <div class="prog-track"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
@@ -322,9 +322,10 @@ select option { background: #1e1e1e; }
   <div id="gen-done" style="display:none;margin-top:10px;" class="card">
     <div style="text-align:center;padding:10px 0;">
       <div style="font-size:28px;margin-bottom:6px;">✅</div>
-      <div style="color:#1bc47d;font-weight:700;font-size:14px;"><span id="done-n"></span> frames gerados!</div>
-      <div style="color:#555;margin-top:4px;font-size:11px;">Todos selecionados no Figma.</div>
-      <button class="btn btn-secondary" style="margin-top:10px;" onclick="resetGen()">🔄 Gerar novamente</button>
+      <div style="color:#1bc47d;font-weight:700;font-size:14px;"><span id="done-n"></span> frames generated!</div>
+      <div style="color:#555;margin-top:4px;font-size:11px;">All of them are selected in Figma.</div>
+      <div id="done-warn" style="display:none;margin-top:6px;font-size:10px;color:#ff9944;">⚠️ The template could not be deleted (is it locked?). It is still on the canvas, under the first frame.</div>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="resetGen()">🔄 Generate again</button>
     </div>
   </div>
   <div id="gen-err" class="box-err" style="display:none;margin-top:10px;"></div>
@@ -333,9 +334,9 @@ select option { background: #1e1e1e; }
 </div><!-- #content -->
 
 <div id="footer">
-  <button class="btn btn-secondary" id="btn-back" onclick="nav(-1)" disabled>← Voltar</button>
-  <span id="step-label">Passo 1 de 5</span>
-  <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Próximo →</button>
+  <button class="btn btn-secondary" id="btn-back" onclick="nav(-1)" disabled>← Back</button>
+  <span id="step-label">Step 1 of 5</span>
+  <button class="btn btn-primary" id="btn-next" onclick="nav(1)">Next →</button>
 </div>
 
 <script>
@@ -348,7 +349,9 @@ select option { background: #1e1e1e; }
 var TEMPLATE_NAMES = [
   'template', 'template produto', 'produto', 'produtos',
   'modelo produto', 'modelo produtos',
-  'modelo de produto', 'modelo de produtos'
+  'modelo de produto', 'modelo de produtos',
+  // equivalentes em inglês para a Community (DEC-011)
+  'product', 'products', 'product template'
 ];
 
 // Limite de tamanho de imagem. Imagens acima deste valor recebem
@@ -375,7 +378,7 @@ var TMAPS = []; // [{ col, layer }]
 var IMAPS = []; // [{ col, layer, scale }]  — múltiplos slots de imagem
 var IMGS  = []; // IMGS[slotIdx] = { imgsKey: ArrayBuffer }
 
-var TITLES = ['CSV', 'Template', 'Mapeamento', 'Imagens', 'Gerar'];
+var TITLES = ['CSV', 'Template', 'Mapping', 'Images', 'Generate'];
 
 // ══════════════════════════════════════════════════════════════════
 //  FUNÇÕES DE NORMALIZAÇÃO
@@ -413,8 +416,8 @@ function nav(d) {
 }
 
 function canGo() {
-  if (CUR === 1 && !CSV.rows.length) { alert('Carregue o CSV primeiro.'); return false; }
-  if (CUR === 2 && !TPL)             { alert('Selecione um frame template primeiro.'); return false; }
+  if (CUR === 1 && !CSV.rows.length) { alert('Load the CSV first.'); return false; }
+  if (CUR === 2 && !TPL)             { alert('Select a template frame first.'); return false; }
   return true;
 }
 
@@ -437,7 +440,7 @@ function showStep(n) {
   }
   document.getElementById('btn-back').disabled = (CUR === 1);
   document.getElementById('btn-next').style.display = (CUR === 5) ? 'none' : '';
-  document.getElementById('step-label').textContent = 'Passo ' + CUR + ' de 5';
+  document.getElementById('step-label').textContent = 'Step ' + CUR + ' of 5';
   document.getElementById('step-title').textContent = TITLES[CUR - 1];
 
   if (CUR === 2) onEnterP2();
@@ -485,7 +488,7 @@ document.getElementById('f-csv').onchange = function(e) {
   var reader = new FileReader();
   reader.onload = function(ev) {
     var parsed = parseCSV(ev.target.result);
-    if (!parsed || !parsed.cols.length) { alert('CSV inválido ou vazio!'); return; }
+    if (!parsed || !parsed.cols.length) { alert('This CSV is empty or could not be read.'); return; }
     CSV = { rows: parsed.rows, cols: parsed.cols, filename: f.name };
     // Resetar mapeamentos quando CSV mudar
     TMAPS = []; IMAPS = []; IMGS = [];
@@ -496,7 +499,7 @@ document.getElementById('f-csv').onchange = function(e) {
 
 function renderCSV() {
   document.getElementById('csv-name').textContent = CSV.filename;
-  document.getElementById('csv-info').textContent = CSV.rows.length + ' produtos, ' + CSV.cols.length + ' colunas';
+  document.getElementById('csv-info').textContent = CSV.rows.length + ' products, ' + CSV.cols.length + ' columns';
   document.getElementById('csv-tags').innerHTML = CSV.cols.map(function(c) {
     return '<span class="tag tag-t">' + esc(c) + '</span>';
   }).join('');
@@ -540,7 +543,7 @@ function renderTpl(data, autoDetected) {
             : 'tag-o';
     html += '<div class="layer-item"><span class="layer-name">' + esc(l.name) + '</span><span class="tag ' + cls + '" style="font-size:9px;">' + l.type + '</span></div>';
   }
-  document.getElementById('tpl-layers').innerHTML = html || '<div style="color:#444;padding:4px;">Nenhuma sub-camada.</div>';
+  document.getElementById('tpl-layers').innerHTML = html || '<div style="color:#444;padding:4px;">No child layers.</div>';
   document.getElementById('p2-ok').style.display = 'block';
 }
 
@@ -597,7 +600,7 @@ function autoMapImages(otherLayers) {
 }
 
 function renderTextMaps(textLayers) {
-  var tOpts = '<option value="">— não mapear —</option>' + textLayers.map(function(l) {
+  var tOpts = '<option value="">— skip —</option>' + textLayers.map(function(l) {
     return '<option value="' + esc(l.name) + '">' + esc(l.name) + '</option>';
   }).join('');
 
@@ -625,10 +628,10 @@ function renderImapSlots(otherLayers) {
     otherLayers = TPL ? TPL.layers.filter(function(l) { return l.type !== 'TEXT'; }) : [];
   }
 
-  var lOpts = '<option value="">— camada —</option>' + otherLayers.map(function(l) {
+  var lOpts = '<option value="">— layer —</option>' + otherLayers.map(function(l) {
     return '<option value="' + esc(l.name) + '">' + esc(l.name) + ' (' + l.type + ')</option>';
   }).join('');
-  var cOpts = '<option value="">— coluna —</option>' + CSV.cols.map(function(c) {
+  var cOpts = '<option value="">— column —</option>' + CSV.cols.map(function(c) {
     return '<option value="' + esc(c) + '">' + esc(c) + '</option>';
   }).join('');
 
@@ -639,7 +642,7 @@ function renderImapSlots(otherLayers) {
     html += '<div class="arrow">→</div>';
     html += '<select class="imap-l">' + lOpts + '</select>';
     html += '<select class="imap-s"><option value="FIT">Fit</option><option value="FILL">Fill</option></select>';
-    html += '<button class="btn-rm" title="Remover slot" onclick="removeSlot(' + i + ')">×</button>';
+    html += '<button class="btn-rm" title="Remove slot" onclick="removeSlot(' + i + ')">×</button>';
     html += '</div>';
   }
   document.getElementById('imap-slots').innerHTML = html;
@@ -686,8 +689,8 @@ document.getElementById('btn-auto').onclick = function() {
   renderTextMaps(textLayers);
   renderImapSlots(otherLayers);
   var b = document.getElementById('btn-auto');
-  b.textContent = '✅ Feito!';
-  setTimeout(function() { b.textContent = '✨ Auto-mapear'; }, 1800);
+  b.textContent = '✅ Done!';
+  setTimeout(function() { b.textContent = '✨ Auto-map'; }, 1800);
 };
 
 // ══════════════════════════════════════════════════════════════════
@@ -796,8 +799,8 @@ function renderImgStatus(totalFiles, matchCount, csvSets, oversized) {
 
   if (totalOversized > 0) {
     document.getElementById('p4-oversized-msg').textContent =
-      totalOversized + ' imagem(ns) encontrada(s) mas acima de ' + SIZE_LIMIT_MB +
-      ' MB — serão puladas. Adicione manualmente no Figma (duplo clique no frame).';
+      totalOversized + ' image(s) found but over ' + SIZE_LIMIT_MB +
+      ' MB — they will be skipped. Add them by hand in Figma (double-click the frame).';
     document.getElementById('p4-oversized-wrap').style.display = 'block';
   } else {
     document.getElementById('p4-oversized-wrap').style.display = 'none';
@@ -821,7 +824,7 @@ function renderImgStatus(totalFiles, matchCount, csvSets, oversized) {
       var loaded = slotImgs[entry.imgsKey] !== undefined;
       var big    = slotOver[entry.imgsKey] !== undefined;
       var cls    = loaded ? 'chip-ok' : (big ? 'chip-big' : 'chip-err');
-      var tip    = big ? 'Acima de ' + SIZE_LIMIT_MB + ' MB — adicione manualmente' : entry.display;
+      var tip    = big ? 'Over ' + SIZE_LIMIT_MB + ' MB — add it by hand' : entry.display;
       html += '<span class="chip ' + cls + '" title="' + esc(tip) + '">' + esc(entry.display) + '</span>';
     }
     html += '</div>';
@@ -853,19 +856,21 @@ function buildGen() {
 
   document.getElementById('gen-summary').innerHTML =
     '<div style="display:flex;gap:14px;flex-wrap:wrap;">' +
-    '<span>📊 <strong style="color:#fff;">' + CSV.rows.length + '</strong> <span style="color:#555;">produtos</span></span>' +
-    '<span>🔗 <strong style="color:#fff;">' + mapped + '</strong> <span style="color:#555;">campos de texto</span></span>' +
-    '<span>🖼️ <strong style="color:#fff;">' + imgSlots + '</strong> <span style="color:#555;">slot(s) de imagem</span></span>' +
-    (totalImgs ? '<span>✅ <strong style="color:#fff;">' + totalImgs + '</strong> <span style="color:#555;">imagens carregadas</span></span>' : '') +
+    '<span>📊 <strong style="color:#fff;">' + CSV.rows.length + '</strong> <span style="color:#555;">products</span></span>' +
+    '<span>🔗 <strong style="color:#fff;">' + mapped + '</strong> <span style="color:#555;">text fields</span></span>' +
+    '<span>🖼️ <strong style="color:#fff;">' + imgSlots + '</strong> <span style="color:#555;">image slot(s)</span></span>' +
+    (totalImgs ? '<span>✅ <strong style="color:#fff;">' + totalImgs + '</strong> <span style="color:#555;">images loaded</span></span>' : '') +
     '</div>';
 }
 
 function updateGridInfo() {
-  var c = parseInt(document.getElementById('g-cols').value) || 5;
+  // Mesmo piso do clampField: caixa vazia ou 0 mostra 1, que é o que a geração vai usar.
+  var c = parseInt(document.getElementById('g-cols').value, 10);
+  if (isNaN(c) || c < 1) { c = 1; }
   var n = CSV.rows.length;
   var r = Math.ceil(n / c);
   document.getElementById('grid-info').textContent =
-    n + ' produtos → ' + c + ' por linha → ' + r + ' linha' + (r !== 1 ? 's' : '');
+    n + ' products → ' + c + ' per row → ' + r + ' row' + (r !== 1 ? 's' : '');
 }
 
 function updateDelWarn() {
@@ -877,8 +882,8 @@ function updateDelWarn() {
   document.getElementById('lbl-hide').style.opacity = del ? '0.4' : '1';
   // Ponto de partida do grid segue o "Excluir template" — mesmo critério do code.js (DEC-010)
   document.getElementById('grid-origin').textContent = del
-    ? 'Ponto de partida: no lugar do template (ele será excluído)'
-    : 'Ponto de partida: à direita do template (+' + GRID_GAP_RIGHT + ' px)';
+    ? 'Starting point: where the template is (it will be deleted)'
+    : 'Starting point: to the right of the template (+' + GRID_GAP_RIGHT + ' px)';
 }
 
 // ── Steppers do Passo 5 ────────────────────────────────────────────
@@ -947,8 +952,8 @@ document.getElementById('hide-tpl').onchange = function() {
 };
 
 document.getElementById('btn-gen').onclick = function() {
-  if (!TPL)             { alert('Volte ao Passo 2 e selecione o template.'); return; }
-  if (!CSV.rows.length) { alert('Volte ao Passo 1 e carregue o CSV.'); return; }
+  if (!TPL)             { alert('Go back to Step 2 and select the template.'); return; }
+  if (!CSV.rows.length) { alert('Go back to Step 1 and load the CSV.'); return; }
 
   // Converter cada slot: ArrayBuffer → array de inteiros (sem compressão, sem canvas)
   var imgsFlat = IMAPS.map(function(_, s) {
@@ -960,14 +965,14 @@ document.getElementById('btn-gen').onclick = function() {
     return slot;
   });
 
-  var cols = parseInt(document.getElementById('g-cols').value) || 5;
+  var cols = parseInt(document.getElementById('g-cols').value) || 1;  // mesmo piso do resumo e do clamp
   var cg   = parseInt(document.getElementById('g-cg').value)   || 0;
   var rg   = parseInt(document.getElementById('g-rg').value)   || 0;
   var offX = parseInt(document.getElementById('g-ox').value, 10) || 0;
   var offY = parseInt(document.getElementById('g-oy').value, 10) || 0;
 
   document.getElementById('btn-gen').disabled = true;
-  document.getElementById('btn-gen').textContent = '⏳ Gerando...';
+  document.getElementById('btn-gen').textContent = '⏳ Generating...';
   document.getElementById('gen-prog').style.display = 'block';
   document.getElementById('gen-done').style.display = 'none';
   document.getElementById('gen-err').style.display  = 'none';
@@ -992,7 +997,7 @@ function resetGen() {
   document.getElementById('gen-done').style.display = 'none';
   document.getElementById('gen-prog').style.display = 'none';
   document.getElementById('btn-gen').disabled = false;
-  document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+  document.getElementById('btn-gen').textContent = '⚡ Generate catalog';
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1023,9 +1028,10 @@ window.onmessage = function(e) {
   if (msg.type === 'done') {
     document.getElementById('gen-prog').style.display = 'none';
     document.getElementById('done-n').textContent = msg.count;
+    document.getElementById('done-warn').style.display = msg.templateNotRemoved ? 'block' : 'none';
     document.getElementById('gen-done').style.display = 'block';
     document.getElementById('btn-gen').disabled = false;
-    document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+    document.getElementById('btn-gen').textContent = '⚡ Generate catalog';
   }
 
   if (msg.type === 'err') {
@@ -1033,7 +1039,7 @@ window.onmessage = function(e) {
     document.getElementById('gen-err').textContent = '❌ ' + msg.msg;
     document.getElementById('gen-err').style.display = 'block';
     document.getElementById('btn-gen').disabled = false;
-    document.getElementById('btn-gen').textContent = '⚡ Gerar Catálogo';
+    document.getElementById('btn-gen').textContent = '⚡ Generate catalog';
   }
 };
 

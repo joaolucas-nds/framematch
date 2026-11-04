@@ -24,20 +24,23 @@ Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de
 
 ## 🤖 Ideias Ativas — Assistente
 
+### 2026-11-04 — Marcar arquivos WebP como «unsupported» no Passo 4
+O seletor da pasta aceita `image/*`, então um `.webp` com nome certo casa, é enviado e falha em silêncio no `figma.createImage` (o `catch` só pula). Na Community, WebP é comum. Ideia: no Passo 4, chip próprio «unsupported format» para `.webp` (e outros que o Figma recusa), sem enviá-lo. Pequena.
+
 ### 2026-11-03 — Preparar a publicação na Figma Community (candidata a fase própria)
-Pesquisado em 2026-11-03 (docs do Figma): (1) **bloqueante:** plugin novo precisa de `"documentAccess": "dynamic-page"` no manifest, e nesse modo `figma.getNodeById` **lança erro** — o `code.js` usa a versão síncrona em `runGenerate`; trocar por `await figma.getNodeByIdAsync`; (2) `"networkAccess": { "allowedDomains": ["none"] }` para o selo «sem acesso à rede» em vez de «Unknown»; (3) o `id` é **atribuído pelo Figma** ao publicar — trocar o `framematch-plugin-v1` pelo dele (DEC-007 previa `id` fixo; muda antes da F5); (4) conta com 2FA, publicar pelo app desktop, ícone 128×128, capa 1920×1080, descrição, categoria, contato de suporte; (5) diretrizes: sem bug óbvio, sem mensagem de erro de desenvolvedor para o usuário, descrição fiel, link de documentação. Privacidade simples: o plugin lê arquivos locais escolhidos pelo usuário e não usa rede.
+Pesquisado em 2026-11-03 (docs do Figma): (1) **bloqueante:** plugin novo precisa de `"documentAccess": "dynamic-page"` no manifest, e nesse modo `figma.getNodeById` **lança erro** — o `code.js` usa a versão síncrona em `runGenerate`; trocar por `await figma.getNodeByIdAsync`; (2) `"networkAccess": { "allowedDomains": ["none"] }` para o selo «sem acesso à rede» em vez de «Unknown»; (3) o `id` é **atribuído pelo Figma** ao publicar — trocar o `framematch-plugin-v1` pelo dele (DEC-007 previa `id` fixo; muda antes da F5); (4) conta com 2FA, publicar pelo app desktop, ícone 128×128, capa 1920×1080, descrição, categoria, contato de suporte; (5) diretrizes: sem bug óbvio, sem mensagem de erro de desenvolvedor para o usuário, descrição fiel, link de documentação. Privacidade simples: o plugin lê arquivos locais escolhidos pelo usuário e não usa rede. **Status:** virou a fase F4.5 do ROADMAP; código na 0.6.0 (WO 0005, DEC-011).
 
 ### 2026-11-03 — UI em inglês (ou bilíngue) para a Community
-A interface é toda em pt-BR (`<html lang="pt-BR">`, textos e `alert`s). Na Community o público é global; inglês amplia o alcance. Opção barata: dicionário de strings `T.pt`/`T.en` escolhido por `navigator.language`. Só vale se a publicação for para o público geral.
+A interface é toda em pt-BR (`<html lang="pt-BR">`, textos e `alert`s). Na Community o público é global; inglês amplia o alcance. Opção barata: dicionário de strings `T.pt`/`T.en` escolhido por `navigator.language`. Só vale se a publicação for para o público geral. **Status:** só inglês na 0.6.0 (WO 0005, DEC-011); bilíngue em «Adiadas».
 
 ### 2026-11-03 — README de uso (vira a documentação do anúncio)
-O `README.md` tem só o título. As diretrizes do Figma pedem link de documentação de uso; um README com o fluxo dos 5 passos, formato do CSV, nomes de camada e limites (4 MB, PNG/JPG/GIF) serve aos dois. A estrutura do projeto estabilizou — é a hora.
+O `README.md` tem só o título. As diretrizes do Figma pedem link de documentação de uso; um README com o fluxo dos 5 passos, formato do CSV, nomes de camada e limites (4 MB, PNG/JPG/GIF) serve aos dois. A estrutura do projeto estabilizou — é a hora. **Status:** escrito em 2026-11-04 (inglês), versionado pela WO 0005.
 
 ### 2026-11-03 — Resumo da grade com «Por linha» vazio mostra 5
-Medido no roteiro da 0.4.0 (item 8): com a caixa «Por linha» vazia ou `0`, o resumo diz «5 por linha» até sair do campo (`parseInt(...) || 5` em `updateGridInfo`). A geração está certa (o clamp corre antes); é só o texto. Correção de uma linha; juntar com outra mudança no Passo 5.
+Medido no roteiro da 0.4.0 (item 8): com a caixa «Por linha» vazia ou `0`, o resumo diz «5 por linha» até sair do campo (`parseInt(...) || 5` em `updateGridInfo`). A geração está certa (o clamp corre antes); é só o texto. Correção de uma linha; juntar com outra mudança no Passo 5. **Status:** corrigido na 0.6.0 (WO 0005).
 
 ### 2026-11-03 — Avisar quando a exclusão do template falhar
-O `code.js` faz `try { tpl.remove(); } catch(e) {}`: se a exclusão falhar (template travado, por exemplo), ninguém fica sabendo — e no modo «no lugar do template» (DEC-010) ele fica escondido debaixo do 1º frame. Ideia: mandar um `warn` na mensagem `done` e mostrar no Passo 5. Pequena; sem pressa até alguém tropeçar.
+O `code.js` faz `try { tpl.remove(); } catch(e) {}`: se a exclusão falhar (template travado, por exemplo), ninguém fica sabendo — e no modo «no lugar do template» (DEC-010) ele fica escondido debaixo do 1º frame. Ideia: mandar um `warn` na mensagem `done` e mostrar no Passo 5. Pequena; sem pressa até alguém tropeçar. **Status:** implementado na 0.6.0 (WO 0005).
 
 ### 2026-06-15 — Persistência automática via `figma.clientStorage` (recomendada)
 Lembrar automaticamente o último mapeamento, a configuração de grade e os checkboxes entre sessões, sem o usuário precisar exportar/importar nada. É o padrão dos bons plugins de dados do Figma e ataca a dor real de refazer o Passo 3 a cada uso. Mais simples para o caso comum que o "exportar JSON" (que continua útil para portar entre máquinas). Bom momento para implementar agora que o `id` do plugin foi fixado (DEC-007). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo e o `clientStorage` fica preso a ele — implementar só com o `id` definitivo (ver «Preparar a publicação»). → ROADMAP F5.
@@ -52,7 +55,7 @@ Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por v
 
 ## 🛌 Adiadas
 > Decisão consciente de não fazer agora. Cada item com **o gatilho que a traz de volta**: ideia adiada sem gatilho é ideia perdida.
-- _(vazia)_
+- **UI bilíngue (pt-BR + en)** — adiada em 2026-11-04 porque dobra cada string a manter e o único usuário hoje lê inglês (DEC-011) — **volta quando** um usuário da Community pedir pt-BR, ou quando aparecer uma segunda língua.
 
 ---
 

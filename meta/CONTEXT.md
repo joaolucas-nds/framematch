@@ -14,7 +14,7 @@ FrameMatch é um plugin para Figma que preenche frames de catálogo de produtos 
 
 - **Linguagem:** JavaScript vanilla — **ES5 estrito** (sem arrow functions, `let`/`const`, `??`, template literals). O motor JS do sandbox do Figma é antigo e rejeita sintaxe moderna silenciosamente ou com erro de inicialização. Ver DEC-001.
 - **Front-end / UI:** HTML + CSS inline, sem frameworks ou bundlers.
-- **API:** Figma Plugin API 1.0.0 (`figma.showUI`, `figma.ui.onmessage`, `figma.getNodeById`, `figma.createImage`).
+- **API:** Figma Plugin API 1.0.0 (`figma.showUI`, `figma.ui.onmessage`, `figma.getNodeByIdAsync`, `figma.createImage`), manifest com `documentAccess: "dynamic-page"` e sem rede (`networkAccess: none`) desde a 0.6.0.
 - **Persistência:** nenhuma — toda a configuração vive em memória durante a execução.
 - **Testes:** sem suíte. `bash scripts/check.sh` confere só a **sintaxe** (guarda ES5 + `node --check` de `code.js` e do `<script>` do `ui.html`); o **comportamento** só se valida manualmente no Figma Desktop (Windows).
 - **Deploy:** arquivos locais, carregados pelo Figma Desktop via `manifest.json`.
@@ -40,6 +40,7 @@ Não há build step nem dependências npm. O plugin em si continua sendo só os 
 
 - **Nomes:** arquivos, funções e variáveis em inglês.
 - **Comentários:** em PT-BR; docstring/comentário onde a lógica não é óbvia ou há decisão não-trivial.
+- **Texto visível ao usuário (UI, `alert`, mensagens do `code.js`):** em **inglês** desde a 0.6.0 (publicação na Community, DEC-011). Sem apóstrofo dentro de string JS de aspas simples.
 - **Commits:** imperativo curto em PT-BR.
 - **Estilo:** ES5 estrito (`var`, `function() {}`, concatenação de string com `+`); legibilidade primeiro, performance só se medida.
 - **Regra de ouro:** a lógica de normalização **nunca se duplica de forma divergente** — se mudar `norm()` no `code.js`, mude `normName()` no `ui.html` junto (ver armadilha #3).
@@ -100,7 +101,7 @@ Fluxo do matching para uma imagem:
 3. **`normName` ≠ `norm`** — se `normName` colapsar espaços múltiplos e `norm` não, produtos com dois espaços no CSV nunca encontram a imagem. → As duas funções devem ser idênticas. Ver FIX-001.
 4. **Base64 no sandbox** — `code.js` não tem `atob`; imagem como Base64 vira lixo. → Sempre array de inteiros. Ver DEC-004/FIX-003.
 5. **Payload grande no `postMessage`** — imagem acima de ~4MB como array de inteiros explode o JSON (cada byte vira ~1–3 chars) e trava o runtime WASM. → Limitar por `SIZE_LIMIT_MB` e alertar. Ver DEC-003 e HISTORY §2.
-6. **`getNodeByIdAsync`** — na API 1.0.0 `figma.getNodeById` é síncrono; não usar a versão async. Ver DEC-001.
+6. **`figma.getNodeById` síncrono com `documentAccess: "dynamic-page"`** — nesse modo (obrigatório para publicar plugin novo) as leituras síncronas por id **lançam erro**. → Usar `await figma.getNodeByIdAsync(id)`; antes de usar outra API, conferir a lista de «Migrating Plugins to Dynamically Load Pages» (docs do Figma). *(Até a 0.5.0 esta armadilha dizia o contrário — «não usar a versão async»; invertida na 0.6.0, ver DEC-011.)*
 7. **WebP enviado ao `figma.createImage`** — o Figma aceita só **PNG, JPEG e GIF** (até 4096px); WebP retorna "unsupported image type". Converter WebP→PNG via canvas cairia na corrupção de transparência da armadilha #2. → Usar PNG/JPG; para reduzir tamanho mantendo alpha, comprimir offline em PNG. Detalhe em HISTORY §4 / DEC nenhum (constraint externo, registrado no IDEAS como descartado).
 8. **Script `.sh` com fim de linha CRLF** — o `core.autocrlf` do Git no Windows converte LF→CRLF no checkout, e o bash falha com `$'\r': command not found` ao rodar `scripts/check.sh`. → O `.gitattributes` fixa `*.sh text eol=lf`; script novo de shell herda a regra.
 

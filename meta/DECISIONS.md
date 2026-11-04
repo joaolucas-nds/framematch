@@ -207,6 +207,29 @@ O grid nascia sempre 60 px à direita do template, com a posição lida no Passo
 - `stepField`/`clampField` ganharam parâmetro opcional `fallback` (vazio → 0 nos offsets); os 3 campos antigos não mudam.
 
 ---
+
+## DEC-011 — Publicação na Figma Community: dynamic-page, UI em inglês, `id` do Figma
+**Data:** 2026-11-04 · **Status:** aceita
+
+### Contexto
+O dono decidiu publicar o FrameMatch na Community, pública, com a UI em inglês (2026-11-04). Pesquisa nos docs do Figma (2026-11-03): plugin novo exige `documentAccess: "dynamic-page"`, modo em que `figma.getNodeById` síncrono lança erro; o `id` definitivo é atribuído pelo Figma ao publicar; as diretrizes de revisão pedem nada de erro técnico para o usuário e um link de documentação. Spec: `meta/specs/261104-publicacao-community-0.6.0.md`.
+
+### Decisão
+- Manifest com `documentAccess: "dynamic-page"` e `networkAccess: { allowedDomains: ["none"] }`; `getNodeById` → `await getNodeByIdAsync`.
+- Todo texto visível em **inglês**, sem seletor de idioma; comentários seguem em PT-BR. Nomes de template em PT continuam na auto-detecção, e entram os equivalentes em inglês.
+- Erro de geração: frase para o usuário + `Details:`; exclusão de template que falha passa a ser avisada.
+- O `id` do manifest troca **uma vez**, para o que o Figma atribuir no «Publish» (commit pequeno depois); só então a F5 (`clientStorage`).
+
+### Alternativas consideradas
+- **UI bilíngue (pt-BR + en)** — adiada (IDEAS «Adiadas»): dobra cada string a manter; o único usuário hoje lê inglês.
+- **Manter `getNodeById` sem `documentAccess`** — o Figma não publica plugin novo sem o campo.
+
+### Consequências
+- A armadilha #6 do CONTEXT foi invertida: antes dizia para **não** usar a versão async.
+- A premissa da DEC-007 («`id` fixado») vale só depois da troca pelo `id` do Figma.
+- Assets do anúncio (textos, ícone, capa, roteiro de prints) vivem fora do repo, em `../261104-figma-listing/`.
+
+---
 ## FIX-001 — Bug de espaços duplos: normName colapsava espaços, norm() do code.js não
 **Data:** 2026-05-30 · **Status:** resolvida
 

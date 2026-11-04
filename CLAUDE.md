@@ -19,7 +19,9 @@ Plugin do Figma (3 arquivos: `code.js`, `ui.html`, `manifest.json`) que preenche
 - **ES5 estrito** em `code.js` e `ui.html` (DEC-001): `var`, `function(){}`, `+` — nada de arrow, `let`/`const`, template literal, `??`, `?.`.
 - **`normName` (ui.html) ≡ `norm` (code.js)** bit a bit (DEC-003, FIX-001). Tocou numa, confira a outra.
 - **Imagem é byte cru:** `ArrayBuffer` → `Array.from(Uint8Array)`. Nunca canvas/compressão (FIX-002), nunca Base64 (FIX-003). WebP não serve em `figma.createImage`.
-- **`id` do `manifest.json` não muda** — o `clientStorage` some junto (DEC-007).
+- **`id` do `manifest.json` só muda uma vez:** para o `id` que o Figma atribui ao publicar (DEC-011). Depois disso, nunca — o `clientStorage` some junto (DEC-007).
+- **`documentAccess: "dynamic-page"`:** nada de leitura síncrona por id (`getNodeById` lança erro) — use as versões `Async` (CONTEXT, armadilha #6).
+- **UI em inglês** (texto visível, `alert`, mensagens do `code.js`); comentários seguem em PT-BR.
 
 ## Convenções
 - Nomes em inglês; comentários em PT-BR. Mensagens de commit em PT-BR, imperativo curto, **sem acento**.

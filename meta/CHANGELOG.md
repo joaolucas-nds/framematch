@@ -7,7 +7,20 @@
 
 ## [Não lançado]
 
-_(nada ainda)_
+> Implementado em 2026-11-04, **aguardando teste no Figma**. Vira **0.6.0** após validação.
+
+### Modificado
+- **Interface em inglês** (DEC-011): todos os textos visíveis, `alert`s e mensagens do `code.js`; a auto-detecção de template passa a reconhecer também `product`, `products`, `product template`.
+- `manifest.json` com `documentAccess: "dynamic-page"` e sem acesso à rede; `getNodeById` → `getNodeByIdAsync`.
+- Erro inesperado na geração mostra uma frase para o usuário, com o detalhe técnico depois.
+
+### Adicionado
+- Aviso na tela de conclusão quando «Delete template» está marcado e a exclusão falha.
+- `README.md` com o guia de uso em inglês (vira a documentação do anúncio).
+
+### Corrigido
+- O Passo 4 prometia WEBP (o Figma não aceita); agora diz JPG, PNG, GIF.
+- Com «Per row» vazio, o resumo da grade mostrava 5; agora mostra 1, o mesmo piso do campo.
 
 ---
 
