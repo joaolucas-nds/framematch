@@ -36,10 +36,13 @@
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
 - [ ] **Testar a 0.6.1 no Figma Desktop** — roteiro curto do chat (2026-11-04).
+- [ ] **About do GitHub** (`gh` não instalado): descrição + topics `figma`, `figma-plugin`, `csv`, `catalog`, `design-automation` pela engrenagem do About na página do repo; conferir também que as imagens do README aparecem.
 - [ ] **Publicar:** anúncio pronto em `../261104-figma-listing/` (textos com contato, ícone, capa, carrossel de 6 slides); ligar a 2FA na conta do Figma e clicar «Publish» no app desktop.
 - [ ] **Depois do Publish:** trocar o `id` do `manifest.json` pelo que o Figma atribuir (WO pequena) — só então a F5 (`clientStorage`).
 
 ## 💬 Última conversa
+
+**2026-11-04 (noite)** — WO 0006 (0.6.0 lançada, tag `v0.6.0` em `437f09d`) e WO 0007 (FIX-005, `1179a13`) aplicadas e empurradas. Pendente com o dono: roteiro curto da 0.6.1 no Figma, About do GitHub, Publish. A tag `v0.6.0` marca o código SEM o FIX-005; a 0.6.1 ganha tag própria após o teste.
 
 **2026-11-04 (tarde)** — **0.6.0 lançada** (roteiro de 10 itens, todos ok; o dono aprovou o inglês). README ganhou prints de cada passo, o resultado e a dica de Auto Layout (`docs/images/`), contato de suporte (e-mail + Issues). Carrossel de 6 slides montado com os prints do dono. Tag `v0.6.0`. Achado nos prints: o Figma renomeia a camada de texto para o conteúdo (`autoRename`) — FIX-005 vai na WO 0007.
 
