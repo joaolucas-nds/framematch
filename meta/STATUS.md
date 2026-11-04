@@ -7,7 +7,7 @@
 ---
 
 ## Versão Atual
-**[0.5.0]** — 2026-11-03 — Offset X/Y no Passo 5 + catálogo no lugar do template ao excluir (DEC-010); validada no Figma Desktop (roteiro de 11 itens).
+**[0.6.0]** — 2026-11-04 — pronta para a Community: manifest `dynamic-page` + sem rede, UI em inglês, README com prints (DEC-011); validada no Figma Desktop (roteiro de 10 itens).
 
 ## ✅ Funcionando
 
@@ -23,10 +23,11 @@
 - Nome **FrameMatch** no Figma (`id` `framematch-plugin-v1`, DEC-007).
 - Passo 5 com stepper editável `[−] [caixa] [+]` nos 3 campos, clamp ao sair do campo (Por linha ≥ 1, Espaços ≥ 0) e geração usando os valores (DEC-006).
 - Offset X/Y no Passo 5 (passo 10, aceita negativos, vazio → 0) somado ao ponto de partida; ponto de partida segue «Excluir template» (no lugar dele ou à direita, +60 px); origem calculada com o template na hora de gerar (DEC-010).
+- UI em inglês; manifest `dynamic-page` + sem rede (`getNodeByIdAsync`); erro de geração com frase + detalhe; aviso se a exclusão do template falhar (DEC-011). README com guia e prints.
 
 ## 🔧 Em Progresso
 
-- **0.6.0 — implementada, aguardando teste no Figma:** preparação da publicação na Community — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão falha (spec `meta/specs/261104-publicacao-community-0.6.0.md`, DEC-011).
+- Nada em progresso.
 
 ## ❌ Quebrado / Com Problema
 
@@ -34,11 +35,12 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Testar a 0.6.0 no Figma Desktop** — roteiro do chat (2026-11-04).
-- [ ] **Publicar:** prints do carrossel com a UI em inglês, revisar os textos e o ícone em `../261104-figma-listing/`, 2FA ligado, «Publish» no app desktop.
+- [ ] **Publicar:** anúncio pronto em `../261104-figma-listing/` (textos com contato, ícone, capa, carrossel de 6 slides); ligar a 2FA na conta do Figma e clicar «Publish» no app desktop.
 - [ ] **Depois do Publish:** trocar o `id` do `manifest.json` pelo que o Figma atribuir (WO pequena) — só então a F5 (`clientStorage`).
 
 ## 💬 Última conversa
+
+**2026-11-04 (tarde)** — **0.6.0 lançada** (roteiro de 10 itens, todos ok; o dono aprovou o inglês). README ganhou prints de cada passo, o resultado e a dica de Auto Layout (`docs/images/`), contato de suporte (e-mail + Issues). Carrossel de 6 slides montado com os prints do dono. Tag `v0.6.0`. Achado nos prints: o Figma renomeia a camada de texto para o conteúdo (`autoRename`) — FIX-005 vai na WO 0007.
 
 **2026-11-04** — Preparação da publicação na Community como **0.6.0** (decisão do dono: pública, UI em inglês): spec, DEC-011, WO 0005 (manifest `dynamic-page`, `getNodeByIdAsync`, tradução, README, erro amigável, aviso de exclusão). Pacote do anúncio (textos, ícone, capa, roteiro de prints, CSV e imagens de exemplo) em `../261104-figma-listing/`. **WO 0005 aplicada e empurrada (`b122194`)**; `check.sh` verde, ainda sem teste no Figma Desktop.
 

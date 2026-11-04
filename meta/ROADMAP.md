@@ -39,8 +39,8 @@
 ## 🟡 F4.5 — Publicação na Figma Community *(em curso — 2026-11-04)*
 **Objetivo:** publicar o FrameMatch na Community, pública, com a UI em inglês (DEC-011).
 **Critério de conclusão:** plugin aprovado na revisão e listado; `manifest.json` com o `id` atribuído pelo Figma.
-- [ ] **0.6.0** — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão — *implementado, aguardando teste.*
-- [ ] Anúncio: textos, ícone 128×128, capa 1920×1080, carrossel (`../261104-figma-listing/`).
+- 🟢 **0.6.0** — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão — *lançado em 2026-11-04.*
+- 🟢 Anúncio: textos (com contato), ícone 128×128, capa 1920×1080, carrossel de 6 slides (`../261104-figma-listing/`) — *pronto em 2026-11-04.*
 - [ ] «Publish» no app desktop (2FA) e aprovação na revisão.
 - [ ] Trocar o `id` do manifest pelo do Figma.
 

@@ -24,6 +24,9 @@ Salvar a configuração de mapeamento (quais colunas → quais camadas, slots de
 
 ## 🤖 Ideias Ativas — Assistente
 
+### 2026-11-04 — Nomear cada frame gerado pelo valor de uma coluna
+Visto nos prints do dono: os 6 frames gerados se chamam todos «product template» no painel de camadas. Ideia: opção no Passo 5 «Name frames by column» (ex.: `Name`), para achar um produto no painel e exportar com nome certo. Pequena; casa com a F5 (lembrar a escolha).
+
 ### 2026-11-04 — Marcar arquivos WebP como «unsupported» no Passo 4
 O seletor da pasta aceita `image/*`, então um `.webp` com nome certo casa, é enviado e falha em silêncio no `figma.createImage` (o `catch` só pula). Na Community, WebP é comum. Ideia: no Passo 4, chip próprio «unsupported format» para `.webp` (e outros que o Figma recusa), sem enviá-lo. Pequena.
 
@@ -60,6 +63,8 @@ Em vez de enviar todas as imagens num único `postMessage`, enviá-las uma por v
 ---
 
 ## ✅ Concluídas
+
+- **Dica de Auto Layout no template** (observação do dono, 2026-11-04: o Auto Layout «empurra» o conteúdo quando o nome é longo) — documentada no README e no carrossel do anúncio.
 
 - **`normForMatch` para matching robusto** — implementada em 0.2.0.
 - **Limitador de tamanho com chip laranja** — implementado em 0.2.0.

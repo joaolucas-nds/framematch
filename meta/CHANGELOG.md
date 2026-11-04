@@ -7,7 +7,13 @@
 
 ## [Não lançado]
 
-> Implementado em 2026-11-04, **aguardando teste no Figma**. Vira **0.6.0** após validação.
+_(nada ainda)_
+
+---
+
+## [0.6.0] — 2026-11-04
+
+> Validada no Figma Desktop em 2026-11-04 (roteiro de 10 itens, todos ok; texto em inglês aprovado pelo dono).
 
 ### Modificado
 - **Interface em inglês** (DEC-011): todos os textos visíveis, `alert`s e mensagens do `code.js`; a auto-detecção de template passa a reconhecer também `product`, `products`, `product template`.
@@ -16,7 +22,7 @@
 
 ### Adicionado
 - Aviso na tela de conclusão quando «Delete template» está marcado e a exclusão falha.
-- `README.md` com o guia de uso em inglês (vira a documentação do anúncio).
+- `README.md` com o guia de uso em inglês (vira a documentação do anúncio), com prints de cada passo, o resultado e a dica de Auto Layout (`docs/images/`), e contato de suporte.
 
 ### Corrigido
 - O Passo 4 prometia WEBP (o Figma não aceita); agora diz JPG, PNG, GIF.
