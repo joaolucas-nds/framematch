@@ -27,7 +27,7 @@
 
 ## 🔧 Em Progresso
 
-- Nada em progresso.
+- **0.6.1 — implementada, aguardando teste no Figma:** FIX-005 — camada de texto não é mais renomeada para o conteúdo (`autoRename = false`). Publicar já com ela.
 
 ## ❌ Quebrado / Com Problema
 
@@ -35,6 +35,7 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
+- [ ] **Testar a 0.6.1 no Figma Desktop** — roteiro curto do chat (2026-11-04).
 - [ ] **Publicar:** anúncio pronto em `../261104-figma-listing/` (textos com contato, ícone, capa, carrossel de 6 slides); ligar a 2FA na conta do Figma e clicar «Publish» no app desktop.
 - [ ] **Depois do Publish:** trocar o `id` do `manifest.json` pelo que o Figma atribuir (WO pequena) — só então a F5 (`clientStorage`).
 

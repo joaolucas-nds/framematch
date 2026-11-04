@@ -7,7 +7,10 @@
 
 ## [Não lançado]
 
-_(nada ainda)_
+> Implementado em 2026-11-04, **aguardando teste no Figma**. Vira **0.6.1** após validação.
+
+### Corrigido
+- As camadas de texto dos frames gerados mantêm o nome do template (`Name`, `Brand`…) em vez de virar o texto preenchido (FIX-005).
 
 ---
 

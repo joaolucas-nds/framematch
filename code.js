@@ -118,6 +118,9 @@ async function runGenerate(msg) {
           var layer = findLayerByName(clone, m.layer);
           if (layer && layer.type === 'TEXT') {
             await loadFontSafe(layer);
+            // Sem isto o Figma renomeia a camada para o texto novo (TextNode.autoRename) e o frame
+            // gerado perde o nome que o matching usa — vira «Potted Fern» em vez de «Name» (FIX-005).
+            try { layer.autoRename = false; } catch(e) {}
             try { layer.characters = String(row[m.col] !== undefined ? row[m.col] : ''); } catch(e) {}
           }
         }

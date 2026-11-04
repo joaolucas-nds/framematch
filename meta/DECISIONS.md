@@ -267,3 +267,13 @@ O dono decidiu publicar o FrameMatch na Community, pública, com a UI em inglês
 - **Causa raiz:** Uma versão intermediária do `buildCsvImageSet` registrava `set[normName(v)] = v` E `set[normForMatch(v)] = v` para cada produto. Como o `renderImgStatus` iterava sobre todas as chaves do dicionário, produtos com caracteres especiais apareciam duas vezes.
 - **Solução:** Estrutura nova com uma única chave por produto: `set[normForMatch(v)] = { imgsKey: normName(v), display: v }`. A chave de busca é `normForMatch`; o valor carrega a chave de dicionário (`imgsKey`) e o nome de exibição separados.
 - **Lição:** Separar explicitamente "chave de busca", "chave de dicionário" e "valor de exibição" em estruturas de dados diferentes. Misturar papéis numa única chave gera bugs sutis.
+
+---
+
+## FIX-005 — Camada de texto renomeada para o conteúdo nos frames gerados
+**Data:** 2026-11-04 · **Status:** resolvida
+
+- **Sintoma:** nos prints do dono (2026-11-04), a camada `Name` de cada frame gerado aparecia no painel como «Potted Fern», «Lounge Chair»… — o nome virava o texto preenchido.
+- **Causa raiz:** `TextNode.autoRename` (docs do Figma: «If this is set to true, `name` will be auto-derived from `characters`»). Camada de texto que nunca foi renomeada à mão nasce com `autoRename = true`; ao trocar `characters`, o Figma troca o nome. Existia desde a 0.1.0.
+- **Solução:** `layer.autoRename = false` antes de `layer.characters = …` no `runGenerate` (0.6.1).
+- **Lição:** o FrameMatch casa por NOME — tudo que muda nome de camada quebra o produto em silêncio (usar um frame gerado como template, procurar a camada no painel). Antes de escrever numa propriedade de nó, conferir os efeitos colaterais na página da API.
