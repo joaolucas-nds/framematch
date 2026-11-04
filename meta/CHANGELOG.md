@@ -7,7 +7,13 @@
 
 ## [Não lançado]
 
-> Implementado em 2026-11-04, **aguardando teste no Figma**. Vira **0.6.1** após validação.
+_(nada ainda)_
+
+---
+
+## [0.6.1] — 2026-11-04
+
+> Validada no Figma Desktop em 2026-11-04 (roteiro de 3 itens, todos ok: nomes das camadas preservados nos frames gerados, frame gerado reutilizável como template, template com Auto Layout).
 
 ### Corrigido
 - As camadas de texto dos frames gerados mantêm o nome do template (`Name`, `Brand`…) em vez de virar o texto preenchido (FIX-005).
