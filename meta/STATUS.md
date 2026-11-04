@@ -40,7 +40,7 @@
 
 ## 💬 Última conversa
 
-**2026-11-04** — Preparação da publicação na Community como **0.6.0** (decisão do dono: pública, UI em inglês): spec, DEC-011, WO 0005 (manifest `dynamic-page`, `getNodeByIdAsync`, tradução, README, erro amigável, aviso de exclusão). Pacote do anúncio (textos, ícone, capa, roteiro de prints, CSV e imagens de exemplo) em `../261104-figma-listing/`.
+**2026-11-04** — Preparação da publicação na Community como **0.6.0** (decisão do dono: pública, UI em inglês): spec, DEC-011, WO 0005 (manifest `dynamic-page`, `getNodeByIdAsync`, tradução, README, erro amigável, aviso de exclusão). Pacote do anúncio (textos, ícone, capa, roteiro de prints, CSV e imagens de exemplo) em `../261104-figma-listing/`. **WO 0005 aplicada e empurrada (`b122194`)**; `check.sh` verde, ainda sem teste no Figma Desktop.
 
 **2026-11-03 (fim da noite)** — **0.5.0 lançada** (roteiro de 11 itens no Figma, todos ok). Pesquisados os requisitos de publicação na Community: o manifest precisa de `documentAccess: "dynamic-page"` e, com ele, `figma.getNodeById` (síncrono, usado no `code.js`) passa a lançar erro — trocar por `getNodeByIdAsync`; o `id` é atribuído pelo Figma ao publicar. Ideias de publicação, UI em inglês e README registradas no IDEAS. Regra nova no CEREBRO: roteiro do dono sai no mesmo turno da WO de código.
 
