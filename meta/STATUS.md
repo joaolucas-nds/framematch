@@ -44,6 +44,8 @@
 
 **2026-11-04 (fim da noite)** — **0.6.1 lançada** (roteiro de 3 itens, todos ok) — é a versão que vai para a Community. Tag `v0.6.1` + Release e About do GitHub pela WO 0008 (`gh` instalado pelo dono; autenticação é dele). Guia do Publish entregue no chat. `zz_backups/` conferido: cópias de 2026-07-18 do DECISIONS/STATUS, 100% contidas no git (`f83a66d`) — liberado para o dono apagar.
 
+**Correção de estado (WO 0008, fecho):** só a tag `v0.6.1` saiu (`4721d50`). About e Release **NÃO** foram criados — `gh` fora do PATH da sessão (`gh: command not found`; o binário existe em `C:\Program Files\GitHub CLI`). Pendente: rodar 5c/5d da WO 0008 numa sessão nova do Code, ou colar na página do repo.
+
 **2026-11-04 (noite)** — WO 0006 (0.6.0 lançada, tag `v0.6.0` em `437f09d`) e WO 0007 (FIX-005, `1179a13`) aplicadas e empurradas. Pendente com o dono: roteiro curto da 0.6.1 no Figma, About do GitHub, Publish. A tag `v0.6.0` marca o código SEM o FIX-005; a 0.6.1 ganha tag própria após o teste.
 
 **2026-11-04 (tarde)** — **0.6.0 lançada** (roteiro de 10 itens, todos ok; o dono aprovou o inglês). README ganhou prints de cada passo, o resultado e a dica de Auto Layout (`docs/images/`), contato de suporte (e-mail + Issues). Carrossel de 6 slides montado com os prints do dono. Tag `v0.6.0`. Achado nos prints: o Figma renomeia a camada de texto para o conteúdo (`autoRename`) — FIX-005 vai na WO 0007.
