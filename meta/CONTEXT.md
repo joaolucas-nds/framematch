@@ -111,7 +111,7 @@ Fluxo do matching para uma imagem:
 
 - `code.js` — thread principal do Figma. Usa `norm()` (trim+lowercase, sem colapsar espaços). Qualquer mudança aqui exige verificar `normName()` no `ui.html` para manter paridade. Suporta `imageMappings` (array) e `deleteTemplate` — versões antigas do ui.html são incompatíveis.
 - `ui.html` — toda a lógica de matching e UI. As funções `normName` e `normForMatch` são o coração do sistema de imagens — leia DEC-003 e FIX-001 antes de tocar. O Passo 5 usa o helper `stepField`/`clampField` para os steppers (DEC-006).
-- `manifest.json` — o `id` (`framematch-plugin-v1`) não muda: o `clientStorage` está preso a ele (DEC-007).
+- `manifest.json` — o `id` (`1699960853154847369`, atribuído pelo Figma no Publish de 2026-11-04; antes era `framematch-plugin-v1`) não muda mais: o plugin publicado e o `clientStorage` estão presos a ele (DEC-007, DEC-011).
 
 ## Contexto de Produto
 

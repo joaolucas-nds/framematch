@@ -7,7 +7,8 @@
 
 ## [Não lançado]
 
-_(nada ainda)_
+### Modificado
+- `id` do `manifest.json`: `framematch-plugin-v1` → `1699960853154847369`, atribuído pelo Figma no formulário de Publish (2026-11-04, DEC-011). Sem mudança de comportamento.
 
 ---
 

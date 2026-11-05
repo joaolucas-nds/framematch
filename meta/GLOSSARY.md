@@ -42,5 +42,5 @@
 - **`SIZE_LIMIT_MB`** — constante no topo do `<script>` do `ui.html` que define o limite de tamanho de imagem em MB. Altere só aqui.
 - **`TEMPLATE_NAMES`** — lista de nomes de frame (em minúsculas) que ativam auto-detecção no Passo 2. Altere só aqui.
 - **`DEFAULT_HIDE_TEMPLATE`** / **`DEFAULT_DELETE_TEMPLATE`** — constantes que definem o padrão dos checkboxes no Passo 5. Altere só aqui.
-- **`framematch-plugin-v1`** — `id` do plugin no `manifest.json` (DEC-007).
+- **`1699960853154847369`** — `id` do plugin no `manifest.json`, atribuído pelo Figma no Publish (2026-11-04, DEC-011). Substituiu o `framematch-plugin-v1` (DEC-007).
 - **`GRID_GAP_RIGHT`** — distância (60 px) entre o template e o 1º frame quando o template NÃO é excluído. Constante no `code.js` com espelho no `ui.html` (só para o texto do Passo 5) — os dois têm de ser iguais (DEC-010).

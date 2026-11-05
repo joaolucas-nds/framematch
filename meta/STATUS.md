@@ -20,7 +20,7 @@
 - Limitador de tamanho (padrão: 4 MB): imagens grandes aparecem em laranja e são puladas.
 - Checkboxes "Ocultar template" e "Excluir template" com padrões configuráveis no topo do script.
 - Imagens transferidas como `ArrayBuffer → Array.from(Uint8Array)` — sem compressão, sem corrupção de transparência.
-- Nome **FrameMatch** no Figma (`id` `framematch-plugin-v1`, DEC-007).
+- Nome **FrameMatch** no Figma; `id` `1699960853154847369`, atribuído pelo Figma no Publish (DEC-007, DEC-011).
 - Passo 5 com stepper editável `[−] [caixa] [+]` nos 3 campos, clamp ao sair do campo (Por linha ≥ 1, Espaços ≥ 0) e geração usando os valores (DEC-006).
 - Offset X/Y no Passo 5 (passo 10, aceita negativos, vazio → 0) somado ao ponto de partida; ponto de partida segue «Excluir template» (no lugar dele ou à direita, +60 px); origem calculada com o template na hora de gerar (DEC-010).
 - UI em inglês; manifest `dynamic-page` + sem rede (`getNodeByIdAsync`); erro de geração com frase + detalhe; aviso se a exclusão do template falhar (DEC-011). README com guia e prints.
@@ -37,10 +37,12 @@
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
 - [ ] **Conferir a página do repo** (`https://github.com/joaolucas-nds/framematch`): imagens do README aparecem; About e Release `v0.6.1` — feitos pela WO 0008 via `gh`; se o relatório dela disser que não deu, fazer pela página (texto no relatório).
-- [ ] **Publicar:** anúncio pronto em `../261104-figma-listing/` (textos com contato, ícone, capa, carrossel de 6 slides); ligar a 2FA na conta do Figma e clicar «Publish» no app desktop.
-- [ ] **Depois do Publish:** trocar o `id` do `manifest.json` pelo que o Figma atribuir (WO pequena) — só então a F5 (`clientStorage`).
+- [ ] **Publicar:** formulário preenchido e revisado pelo chat em 2026-11-04 (textos, imagens, segurança de dados, contato, `id`, «Sem acesso à rede») — falta o dono clicar «Publicar» e aguardar a revisão do Figma (e-mail).
+- [ ] **F5 (`clientStorage`) liberada pelo `id`** — e, quando entrar, **atualizar o formulário de segurança de dados**: a pergunta 4 passa a «stores data locally (figma.clientStorage)».
 
 ## 💬 Última conversa
+
+**2026-11-04 (madrugada do Publish)** — `id` atribuído pelo Figma (`1699960853154847369`) gravado no `manifest.json` pelo dono e versionado pela WO 0009. Formulário de Publish revisado pelo chat pelos prints: tudo certo (contato de suporte, «Sem acesso à rede», segurança de dados com respostas corretas). Liberado para publicar.
 
 **2026-11-04 (fim da noite)** — **0.6.1 lançada** (roteiro de 3 itens, todos ok) — é a versão que vai para a Community. Tag `v0.6.1` + Release e About do GitHub pela WO 0008 (`gh` instalado pelo dono; autenticação é dele). Guia do Publish entregue no chat. `zz_backups/` conferido: cópias de 2026-07-18 do DECISIONS/STATUS, 100% contidas no git (`f83a66d`) — liberado para o dono apagar.
 

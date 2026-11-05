@@ -43,11 +43,11 @@
 - 🟢 Anúncio: textos (com contato), ícone 128×128, capa 1920×1080, carrossel de 6 slides (`../261104-figma-listing/`) — *pronto em 2026-11-04.*
 - 🟢 **0.6.1** — FIX-005 (camada de texto não renomeia) — *lançado em 2026-11-04; é a versão publicada.*
 - [ ] «Publish» no app desktop (2FA) e aprovação na revisão.
-- [ ] Trocar o `id` do manifest pelo do Figma.
+- 🟢 `id` do manifest trocado pelo do Figma (`1699960853154847369`) — *2026-11-04.*
 
 ## 🔵 F5 — Persistência de configuração *(futuro)*
 **Objetivo:** eliminar a necessidade de refazer o mapeamento para templates recorrentes.
-- **Persistência automática via `figma.clientStorage`** — lembra último mapeamento, grade e checkboxes entre sessões (caso comum). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo, e o `clientStorage` fica preso a ele — fazer a F5 só com o `id` definitivo.
+- **Persistência automática via `figma.clientStorage`** — lembra último mapeamento, grade e checkboxes entre sessões (caso comum). **Atenção (2026-11-03):** ao publicar na Community o Figma atribui um `id` novo, e o `clientStorage` fica preso a ele — fazer a F5 só com o `id` definitivo. **`id` definitivo desde 2026-11-04.** Ao publicar a F5, atualizar o formulário de segurança de dados (pergunta 4: passa a guardar dados locais via `figma.clientStorage`).
 - **Exportar/importar mapeamento como JSON** — para portar configuração entre máquinas ou templates diferentes; importar pré-preenche os slots no Passo 3.
 
 ## 🔵 F6 — Ferramenta Python de compressão em lote *(futuro)*
