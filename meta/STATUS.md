@@ -36,13 +36,15 @@
 
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
-- [ ] **Conferir a página do repo** (`https://github.com/joaolucas-nds/framematch`): imagens do README aparecem; About e Release `v0.6.1` — feitos pela WO 0008 via `gh`; se o relatório dela disser que não deu, fazer pela página (texto no relatório).
+- [ ] **Conferir a página do repo** (`https://github.com/joaolucas-nds/framematch`): imagens do README aparecem; About e Release `v0.6.1` já criados pela WO 0009 (Edição 5, `gh.exe` pelo caminho completo); só falta o dono olhar a página.
 - [ ] **Publicar:** formulário preenchido e revisado pelo chat em 2026-11-04 (textos, imagens, segurança de dados, contato, `id`, «Sem acesso à rede») — falta o dono clicar «Publicar» e aguardar a revisão do Figma (e-mail).
 - [ ] **F5 (`clientStorage`) liberada pelo `id`** — e, quando entrar, **atualizar o formulário de segurança de dados**: a pergunta 4 passa a «stores data locally (figma.clientStorage)».
 
 ## 💬 Última conversa
 
 **2026-11-04 (madrugada do Publish)** — `id` atribuído pelo Figma (`1699960853154847369`) gravado no `manifest.json` pelo dono e versionado pela WO 0009. Formulário de Publish revisado pelo chat pelos prints: tudo certo (contato de suporte, «Sem acesso à rede», segurança de dados com respostas corretas). Liberado para publicar.
+
+**Correção de estado (wrap da WO 0009):** a pendência de About/Release da WO 0008 está **resolvida** — `gh release view v0.6.1` e `gh repo view` conferidos na sessão da WO 0009. O parágrafo «Correção de estado (WO 0008, fecho)» abaixo descreve o estado ANTERIOR.
 
 **2026-11-04 (fim da noite)** — **0.6.1 lançada** (roteiro de 3 itens, todos ok) — é a versão que vai para a Community. Tag `v0.6.1` + Release e About do GitHub pela WO 0008 (`gh` instalado pelo dono; autenticação é dele). Guia do Publish entregue no chat. `zz_backups/` conferido: cópias de 2026-07-18 do DECISIONS/STATUS, 100% contidas no git (`f83a66d`) — liberado para o dono apagar.
 
