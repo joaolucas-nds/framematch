@@ -28,7 +28,7 @@
 
 ## 🔧 Em Progresso
 
-- Nada em progresso. Próximo passo é do dono: Publish (Backlog).
+- **Stand-by** (decisão do dono, 2026-11-06 [relatado pelo dono]): desenvolvimento pausado até a resposta da revisão do Figma. Nada em progresso.
 
 ## ❌ Quebrado / Com Problema
 
@@ -38,9 +38,11 @@
 
 - [ ] **Conferir a página do repo** (`https://github.com/joaolucas-nds/framematch`): imagens do README aparecem; About e Release `v0.6.1` já criados pela WO 0009 (Edição 5, `gh.exe` pelo caminho completo); só falta o dono olhar a página.
 - [ ] **Revisão da Community:** enviado pelo dono até 2026-11-06, com o formulário de segurança de dados [relatado pelo dono]. Aguardar o e-mail do Figma; se recusar, o motivo vem no e-mail — trazer para o chat.
-- [ ] **F5 (`clientStorage`) liberada pelo `id`** — e, quando entrar, **atualizar o formulário de segurança de dados**: a pergunta 4 passa a «stores data locally (figma.clientStorage)».
+- [ ] **F5 (`clientStorage`) — PAUSADA até a resposta do Figma** (decisão do dono, 2026-11-06). Liberada pelo `id` definitivo; quando entrar, atualizar a pergunta 4 do formulário de segurança de dados («stores data locally (figma.clientStorage)»). Primeiro passo: o chat escreve a spec.
 
 ## 💬 Última conversa
+
+**2026-11-06 (fecho)** — WO 0010 aplicada (`230516a`). **Stand-by** por decisão do dono até o e-mail da revisão do Figma; a F5 fica para depois da resposta. Conversa encerrada para transferência — handoff em `../261106-HANDOFF-BRIEF.md` (fora do git). Técnicas novas registradas: `gh` pelo caminho completo (CEREBRO, CLAUDE.md) e `python`/`python3` travando no Code (CLAUDE.md).
 
 **2026-11-06** — **FrameMatch 0.6.1 enviado para a revisão da Figma Community** (público, com as respostas de segurança de dados). About e Release `v0.6.1` do GitHub feitos pela WO 0009. Enquanto a revisão corre: próxima frente candidata é a F5 (`clientStorage`), já liberada pelo `id` definitivo.
 

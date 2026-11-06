@@ -43,6 +43,10 @@ Plugin do Figma (3 arquivos: `code.js`, `ui.html`, `manifest.json`) que preenche
 - Ao fechar QUALQUER tarefa (`/apply-wo`, `/wrap`, `/sondar`), grave o MESMO relatório em `../AAMMDD-HHMM-code-framematch-<ato>-<alvo>.txt` (pasta-pai, fora do git). `<ato>` ∈ `apply` · `wrap` · `probe` · `explore`. `<alvo>` = a WO (`wo0001`) ou duas/três palavras com hífen. `AAMMDD-HHMM` sai de `date +%y%m%d-%H%M`, rodado na hora.
 - Se a escrita for negada, DIGA e siga — o relatório no chat continua sendo a entrega.
 
+## Armadilhas do ambiente (PC do dono, Windows + Git Bash)
+- **`python`/`python3` podem travar** (provável alias da Microsoft Store): travaram 120 s nos `/wrap` das WOs 0007 e 0009, sem alterar nada [medido: relatórios]. Para script, prefira a ferramenta Edit ou `node -e`; se precisar de Python, confira antes com `python --version`.
+- **`gh`** pelo caminho completo se não estiver no PATH: `"/c/Program Files/GitHub CLI/gh.exe"`. Nunca `gh auth login/switch` (é do dono).
+
 ## Config (modelo × esforço)
 - WO com diff exato já validado → **Sonnet**, esforço baixo/médio.
 - Tarefa com julgamento sem rede (código novo de F4/F5, WO que delega decisão) → **Opus**, esforço alto.
