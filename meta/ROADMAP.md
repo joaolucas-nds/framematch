@@ -42,7 +42,7 @@
 - 🟢 **0.6.0** — manifest `dynamic-page` + sem rede, `getNodeByIdAsync`, UI em inglês, README, erro amigável, aviso de exclusão — *lançado em 2026-11-04.*
 - 🟢 Anúncio: textos (com contato), ícone 128×128, capa 1920×1080, carrossel de 6 slides (`../261104-figma-listing/`) — *pronto em 2026-11-04.*
 - 🟢 **0.6.1** — FIX-005 (camada de texto não renomeia) — *lançado em 2026-11-04; é a versão publicada.*
-- [ ] «Publish» no app desktop (2FA) e aprovação na revisão.
+- 🟡 «Publish» feito (até 2026-11-06, com segurança de dados) — *em revisão no Figma; a fase fecha com a aprovação.*
 - 🟢 `id` do manifest trocado pelo do Figma (`1699960853154847369`) — *2026-11-04.*
 
 ## 🔵 F5 — Persistência de configuração *(futuro)*

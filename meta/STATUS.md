@@ -37,10 +37,12 @@
 ## 📋 Backlog (curto prazo — itens acionáveis)
 
 - [ ] **Conferir a página do repo** (`https://github.com/joaolucas-nds/framematch`): imagens do README aparecem; About e Release `v0.6.1` já criados pela WO 0009 (Edição 5, `gh.exe` pelo caminho completo); só falta o dono olhar a página.
-- [ ] **Publicar:** formulário preenchido e revisado pelo chat em 2026-11-04 (textos, imagens, segurança de dados, contato, `id`, «Sem acesso à rede») — falta o dono clicar «Publicar» e aguardar a revisão do Figma (e-mail).
+- [ ] **Revisão da Community:** enviado pelo dono até 2026-11-06, com o formulário de segurança de dados [relatado pelo dono]. Aguardar o e-mail do Figma; se recusar, o motivo vem no e-mail — trazer para o chat.
 - [ ] **F5 (`clientStorage`) liberada pelo `id`** — e, quando entrar, **atualizar o formulário de segurança de dados**: a pergunta 4 passa a «stores data locally (figma.clientStorage)».
 
 ## 💬 Última conversa
+
+**2026-11-06** — **FrameMatch 0.6.1 enviado para a revisão da Figma Community** (público, com as respostas de segurança de dados). About e Release `v0.6.1` do GitHub feitos pela WO 0009. Enquanto a revisão corre: próxima frente candidata é a F5 (`clientStorage`), já liberada pelo `id` definitivo.
 
 **2026-11-04 (madrugada do Publish)** — `id` atribuído pelo Figma (`1699960853154847369`) gravado no `manifest.json` pelo dono e versionado pela WO 0009. Formulário de Publish revisado pelo chat pelos prints: tudo certo (contato de suporte, «Sem acesso à rede», segurança de dados com respostas corretas). Liberado para publicar.
 
